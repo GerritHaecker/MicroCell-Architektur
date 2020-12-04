@@ -7,7 +7,7 @@ Wozu braucht es eine neue, eine andere Steuerungsarchitektur? Wohl stellt sich d
 
 Industrie 4.0 und Digitalisierung. Buzzer-Words der aktuellen Zeit verkünden sie eine Industrierevolution, deren Sinn und Grundgedanken nicht immer ganz offensichtlich sind. 
 
-<img src="Illustration/Revolution.png" alt="Revolution" style="zoom: 50%;" />
+<img src="Illustration/Revolution.png" alt="Revolution" style="zoom: 33%;" />
 
 Erstaunlich genug, dass führende Institute in Studien tiefgreifend untersuchen, ob es gar nur eine Industrie-Evolution sei und weniger einer Revolution. Sind wir doch allerorts in unserer modernen Industrie des 21. Jahrhunderts doh bereits schon längst digital ausgestattet. Und selbst dieser Text, geschrieben auf einen portablen Rechner angedockt an eine Cloud zum öffentlichen Verbreiten dieses Gedankengutes. Etwas Feintuning, einige Notepad in der Fertigung, Höhenverstellbare Tische und ein guter Scanner zur Produktverfolgung. Fertig ist Industrie 4.0. Wer es glaubt kennt das eigentliche Motiv hinter der Digitalisierung und hinter Industrie 4.0 offensichtlich noch nicht. 
 
@@ -33,7 +33,7 @@ Die bislang erfolgreichen Automatisierungslösungen inklusive ihrer recht statis
 
 Diese MicroCell Architektur ist ein möglicher Baustein. Sie ist dezentral und wandelbar. Unabhängig und unvoreingenommen. Generisch und sehr abstrakt. Sie ist ein Bauanleitung für einen digitalen Organismus, ein System, welches wächst durch Code vieler Entwickler.
 
-![MicroCell](MicroCell.png)
+![MicroCell](MicroCell-7113500.png)
 
 ### Ziel dieser Architektur Entwicklung
 
