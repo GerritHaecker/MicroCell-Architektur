@@ -55,11 +55,11 @@ Sie hat den Anspruch ganzheitlich auf die gesamte Herausforderung der Automatisi
 
 ## RAMI 4.0 zeigt in die richtige Richtung
 
-![RAMI4.0](/Users/gerrit/Git/MicroCell-architecture/RAMI4.0.png)
+![RAMI4.0](Illustration/RAMI4.0.png)
 
 ## Die Hierarchie der Automatisierungspyramide
 
-![Bild 3](/Users/gerrit/Git/MicroCell-architecture/Bild 3.jpg)
+![Automatisierungspyramide](Illustration/Automatisierungspyramide.png)
 
 ## Ein kurzer Blick auf Systemtheorie und andere Modelle
 
@@ -67,7 +67,7 @@ Sie hat den Anspruch ganzheitlich auf die gesamte Herausforderung der Automatisi
 
 > Das Ganze ist mehr als die Summe seiner Teile. *(Aristoteles)*
 
-![Systemaufbau einfach](/Users/gerrit/Git/MicroCell-architecture/Systemaufbau einfach.png)
+![Systemaufbau einfach](Illustration/Systemaufbau einfach.png)
 
 Streift man so durch die Welt der Darstellungsmodelle so fallen eine einige schlüssige Konzepte in Auge. Eines der wohl bekanntesten in der Softwareszene dürfte immer noch das ERM (Entity-Relationchip-Modell) zur Darstellung von Datenmodellen sein.
 
@@ -77,19 +77,13 @@ Lehnen wir uns an diese Form der Abbildung von Beziehung zwischen Systemen komme
 
 Die Suche führt uns zum Begriff der Fähigkeiten (Skill). Ein System kann sich über seine Fähigkeit beschreiben. User eines Systems sind auch einzig von außen gesehen an den Fähigkeiten eines Systems interessiert. Bringe ich Subsysteme mit ihren Fähigkeiten auf die richtige Weise zusammen, entsteht eine neue Fähigkeit die ein übergeordnetes oder benachbartes System nützlich finden könnte. Arbeitsteilung über Fähigkeiten, wie im wahren Leben. Und selbst eine Fähigkeit zu besitzen, ist schon eine Fähigkeit. Einen Integer zu repräsentieren, ist ebenso eine Fähigkeit, wie in einem Kamerabild ein Objekt zu finden, den Hauptschalter abzufragen oder selbst das Gesamtsystem einer Produktionsanlage zu sein. Man ahnt schon, Fähigkeiten wohin das Auge reicht. Egal wie tief man eintaucht, immer kommen neue Fähigkeiten zum Vorschein. Gerade so, wie beim Apfelmännchen.
 
-![Skillanordnung physisch](/Users/gerrit/Git/MicroCell-architecture/Skillanordnung physisch.png)
+![Skillanordnung physisch](Illustration/Skillanordnung physisch.png)
 
 Physisch angeordnet macht es gar keinen Sinn, diese hierarchisch durch unterschiedliche Kommunikationsarten und Standards zu verbinden. All das würde völlig unnötig einschränken und dem System an anderer Stelle klassisch den Weg abschneiden. 
 
 ## Vordefinierte Interface zur Verbindung der Fähigkeiten untereinander
 
-
-
-![image-20201208220507813](/Users/gerrit/Git/MicroCell-architecture/image-20201208220507813.png)
-
-
-
-
+![Skill Verbindung](Illustration/Skill Verbindung.png)
 
 
 
