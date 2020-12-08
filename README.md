@@ -29,7 +29,7 @@ Seit dieser Zeit hat sich unsere Industrie, Ihre Prozesse und Methoden ständig 
 
 Wer "echte" digitale Produkte anbieten will, weiß es längst. DIGITALISIERUNG ist die totale Individualisierung für Jeden. Egal wann, egal wo, egal wieviel, egal wie ausgefallen.
 
-![Pyramide der Megatrends](Illustration/Pyramide der Megatrends.png)
+![Megatrends](Pyramide der Megatrends.png)
 
 Schon die großen Studien von Gartner, IBM, Forbes & Co. ergaben unlängst: Der Weg zur digitalen Transformation führt über Automatisierung und Individualisierung. Aus Sicht konventioneller analoger Industrialisierung, was für ein Gegensatz.
 
