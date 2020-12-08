@@ -29,7 +29,7 @@ Seit dieser Zeit hat sich unsere Industrie, Ihre Prozesse und Methoden ständig 
 
 Wer "echte" digitale Produkte anbieten will, weiß es längst. DIGITALISIERUNG ist die totale Individualisierung für Jeden. Egal wann, egal wo, egal wieviel, egal wie ausgefallen.
 
-![Pyramide der Megatrends](Illustration/Pyramide der Megatrends.png)
+<img src="Illustration/Pyramide der Megatrends.png" alt="Pyramide der Megatrends"  />
 
 Schon die großen Studien von Gartner, IBM, Forbes & Co. ergaben unlängst: Der Weg zur digitalen Transformation führt über Automatisierung und Individualisierung. Aus Sicht konventioneller analoger Industrialisierung, was für ein Gegensatz.
 
@@ -55,11 +55,11 @@ Sie hat den Anspruch ganzheitlich auf die gesamte Herausforderung der Automatisi
 
 ## RAMI 4.0 zeigt in die richtige Richtung
 
-![RAMI4.0](Illustration/RAMI4.0.png)
+<img src="Illustration/RAMI4.0.png" alt="RAMI4.0" style="zoom:67%;" />
 
 ## Die Hierarchie der Automatisierungspyramide
 
-![Automatisierungspyramide](Illustration/Automatisierungspyramide.png)
+<img src="Illustration/Automatisierungspyramide.png" alt="Automatisierungspyramide" style="zoom:67%;" />
 
 ## Ein kurzer Blick auf Systemtheorie und andere Modelle
 
@@ -67,7 +67,7 @@ Sie hat den Anspruch ganzheitlich auf die gesamte Herausforderung der Automatisi
 
 > Das Ganze ist mehr als die Summe seiner Teile. *(Aristoteles)*
 
-![Systemaufbau einfach](Illustration/Systemaufbau einfach.png)
+<img src="Illustration/Systemaufbau einfach.png" alt="Systemaufbau einfach" style="zoom:67%;" />
 
 Streift man so durch die Welt der Darstellungsmodelle so fallen eine einige schlüssige Konzepte in Auge. Eines der wohl bekanntesten in der Softwareszene dürfte immer noch das ERM (Entity-Relationchip-Modell) zur Darstellung von Datenmodellen sein.
 
@@ -77,13 +77,13 @@ Lehnen wir uns an diese Form der Abbildung von Beziehung zwischen Systemen komme
 
 Die Suche führt uns zum Begriff der Fähigkeiten (Skill). Ein System kann sich über seine Fähigkeit beschreiben. User eines Systems sind auch einzig von außen gesehen an den Fähigkeiten eines Systems interessiert. Bringe ich Subsysteme mit ihren Fähigkeiten auf die richtige Weise zusammen, entsteht eine neue Fähigkeit die ein übergeordnetes oder benachbartes System nützlich finden könnte. Arbeitsteilung über Fähigkeiten, wie im wahren Leben. Und selbst eine Fähigkeit zu besitzen, ist schon eine Fähigkeit. Einen Integer zu repräsentieren, ist ebenso eine Fähigkeit, wie in einem Kamerabild ein Objekt zu finden, den Hauptschalter abzufragen oder selbst das Gesamtsystem einer Produktionsanlage zu sein. Man ahnt schon, Fähigkeiten wohin das Auge reicht. Egal wie tief man eintaucht, immer kommen neue Fähigkeiten zum Vorschein. Gerade so, wie beim Apfelmännchen.
 
-![Skillanordnung physisch](Illustration/Skillanordnung physisch.png)
+<img src="Illustration/Skillanordnung physisch.png" alt="Skillanordnung physisch" style="zoom:67%;" />
 
 Physisch angeordnet macht es gar keinen Sinn, diese hierarchisch durch unterschiedliche Kommunikationsarten und Standards zu verbinden. All das würde völlig unnötig einschränken und dem System an anderer Stelle klassisch den Weg abschneiden. 
 
 ## Vordefinierte Interface zur Verbindung der Fähigkeiten untereinander
 
-![Skill Verbindung](Illustration/Skill Verbindung.png)
+<img src="Illustration/Skill Verbindung.png" alt="Skill Verbindung" style="zoom:67%;" />
 
 
 
