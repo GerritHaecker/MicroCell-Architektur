@@ -1,15 +1,12 @@
 # Die MicroCell Architektur
 Dezentrale Steuerungsarchitektur der OurPlant Maschinenplattform
 
-## Auf dem Weg zu einer neuen Architektur
-
-<<<<<<< Updated upstream
 Wozu braucht es eine neue, eine andere Steuerungsarchitektur? Wohl stellt sich die Frage in Hinblick auf die Unmengen an Lösungen der Steuerungstechnik und der Softwarestrukturen. Und dennoch scheint es unter den Gesichtspunkten einer neuen Zeit Schranken in unserem Denken zu geben, die uns einen einfache evolutionäre Weiterentwicklung der bestehenden Basis verwehren.
 
+[TOC]
+
 # Grundlos wird sich nichts verändern
-=======
 Wozu braucht es eine neue, eine andere Steuerungsarchitektur? Wohl stellt sich die Frage im Hinblick auf die Unmengen an Lösungen der Steuerungstechnik und der Softwarestrukturen. Und dennoch scheint es unter den Gesichtspunkten einer neuen Zeit Schranken in unserem Denken zu geben, die uns einen einfache evolutionäre Weiterentwicklung der bestehenden Basis verhindert.
->>>>>>> Stashed changes
 
 Industrie 4.0 und Digitalisierung. Buzzer-Words der aktuellen Zeit verkünden sie eine Industrierevolution, deren Sinn und Grundgedanken nicht immer ganz offensichtlich sind. 
 
@@ -25,7 +22,7 @@ Also sei allen Corsicht geboten, die sich allzu gern auf den Lorbeeren der deuts
 
 Wer sich mit der Fragestellung Digitalisierung oder Industrie 4.0 (gerne auch Wirtschaft oder Gesellschaft 4.0) der muss sich etwas aus der Mitte der Technik entfernen. Auch hier gilt: Never change a running system. Und so stellt im Gegenzuzug die Frage, warum so radikale Veränderungen, wie Revolution names Industrie 4.0, im Gange sein sollen. Den Grund dafür liefert bereits 2010 Yoram Koren vom MIT in seiner Arbeit über "The global manufacuring revolution". 
 
-<img src="Illustration/The global manufacturing revolution.png" alt="The global manufacturing revolution" style="zoom:50%;" />
+<img src="Illustration/The global manufacturing revolution.png" alt="The global manufacturing revolution" style="zoom:45%;" />
 
 Letztendlich sind es die Bedürfnisse oder auch der vermakrtbare Nutzen, der alle Kräfte einer Wirtschaft und Industrie hervorbringt. Wer Bedürfnisse erfüllt, für die andere bereit sind, Geld zu zahlen, macht ein Geschäft. Wer das Bedürfnisse Vieler gleichzeitig erfüllen kann, macht das ganz große Geschäft. So entstand vor mehr als 150 Jahren das Industriezeitalter, den Wirtschaftlern als Taylorismus bekannt. Die Wertschöpfung verändert sich von der handwerklichen Manufaktur hin zur Massenproduktion. Henry Ford wollte jeden in die Lage versetzen, ein Automobil zu fahren. Hauptsache es war schwarz und hieß Ford T.
 
@@ -99,9 +96,5 @@ Physisch angeordnet macht es gar keinen Sinn, diese hierarchisch durch unterschi
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
 
-<<<<<<< Updated upstream
-Dieses Werk ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Namensnennung - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz</a>.
-=======
+Dieses Werk ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Namensnennung - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz</a>
 
-
->>>>>>> Stashed changes
