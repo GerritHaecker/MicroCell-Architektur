@@ -1,11 +1,15 @@
 # Die MicroCell Architektur
 Dezentrale Steuerungsarchitektur der OurPlant Maschinenplattform
 
-## Einführung
+## Auf dem Weg zu einer neuen Architektur
 
+<<<<<<< Updated upstream
 Wozu braucht es eine neue, eine andere Steuerungsarchitektur? Wohl stellt sich die Frage in Hinblick auf die Unmengen an Lösungen der Steuerungstechnik und der Softwarestrukturen. Und dennoch scheint es unter den Gesichtspunkten einer neuen Zeit Schranken in unserem Denken zu geben, die uns einen einfache evolutionäre Weiterentwicklung der bestehenden Basis verwehren.
 
 # Grundlos wird sich nichts verändern
+=======
+Wozu braucht es eine neue, eine andere Steuerungsarchitektur? Wohl stellt sich die Frage im Hinblick auf die Unmengen an Lösungen der Steuerungstechnik und der Softwarestrukturen. Und dennoch scheint es unter den Gesichtspunkten einer neuen Zeit Schranken in unserem Denken zu geben, die uns einen einfache evolutionäre Weiterentwicklung der bestehenden Basis verhindert.
+>>>>>>> Stashed changes
 
 Industrie 4.0 und Digitalisierung. Buzzer-Words der aktuellen Zeit verkünden sie eine Industrierevolution, deren Sinn und Grundgedanken nicht immer ganz offensichtlich sind. 
 
@@ -95,4 +99,9 @@ Physisch angeordnet macht es gar keinen Sinn, diese hierarchisch durch unterschi
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
 
+<<<<<<< Updated upstream
 Dieses Werk ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Namensnennung - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz</a>.
+=======
+
+
+>>>>>>> Stashed changes
