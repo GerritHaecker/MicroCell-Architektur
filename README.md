@@ -96,7 +96,36 @@ Physisch angeordnet macht es gar keinen Sinn, Fähigkeiten hierarchisch durch un
 
 ## Vordefinierte Interface zur Verbindung der Fähigkeiten untereinander
 
+Spannend wird jetzt die Beziehungen zwischen den Fähigkeiten zu betrachten. Unabhängig und dezentral heißt, die Hersteller der Fähigkeiten kennen sich nicht zwangsläufig und können sich somit wenig aufeinander abstimmen. Sie sind darauf angewiesen, vereinheitlichte normierte Verbindung- und Kommuniketionskanäle zu verwenden. Dies macht die Bedeutung vereinheitlichter Kommunikationsstandards deutlich. Nun sind aber Fähigkeiten so individuell wie die Systemteilnehmer selbst.  
+
 <img src="Illustration/Skill Verbindung.png" alt="Skill Verbindung" style="zoom:67%;" />
+
+Bei näherer Betrachtung kann man Fähigkeiten beschreiben. Diese Beschreibungen sind für Fähigkeiten, ganz gleich, wie sie letztlich realisiert sind. Fähigkeiten sind somit durch Skill-Interface erklärbar. Sie können normiert und vereinheitlicht vereinbart werden. Skill-Interface sind mit Eigenschaften versehen, sogenannte Skill-Methoden.
+
+Fähigkeiten wirken aber nicht nur auf den unterschiedlichen Systemebenen gleichermaßen sondern entfalten sich auch in alle systemischen Betrachtungsrichtungen (360°):
+
+- Prozess Logik
+- System- und Datenstruktur
+- UI (User Interaktion)
+- Dokumentation
+- Safty und Security
+- uns so weiter.
+
+Systeme können offensichtlich nicht nur durch eine Fähigkeit, sondern durch beliebig viele Fähigkeiten beschrieben werden. Je nach Bedarf docken sich andere Konsumenten (andere Systemteilnehmer) nur an die für sie relevante Fähigkeiten an. Die Vernetzung der Systemteilnehmer ist somit nicht nur hierarchisch sondern räumlich. 
+
+<img src="Illustration/HIrnzelle.png" alt="HIrnzelle" style="zoom: 67%;" />
+
+Die Vernetzung erinnert dabei sehr stark an die neuronale Vernetzung von Zellen. Auch innert die Anordnung vereinheitlichter Skill-Interface um eine individuelle Realisierung im Kern an die Struktur und den Aufbau von Zellen. 
+
+## Die MicroCell (Mikrozelle) als Basisbaustein der neuen Systemarchitektur
+
+Diese Parallelen in die Organismen der Natur sind eine große Triebkraft für die Namensgebung des Basisbausteins der neuen Systemarchitektur. Aber auch die Namensnähe zum Begriff des MicroServices ist nicht ungewollt. Die konsequente Kapselung von Code und Logik in dezentrale unabhängige MicroServices sind ebenso ein Grundmotiv der MicroCell. 
+
+<img src="Illustration/MicroCell einfach.png" alt="MicroCell einfach" style="zoom:67%;" />
+
+Dennoch geht die MircoCell einen bedeutenden Schritt weiter. Während sich MicroServices vorrangig in seiner Umsetzung nur der Dimension der Process-Logik widmen und die anderen systemischen Dimensionen auf anderen Lösungsebenen (UI, Saefty, Dokumente) wiederfinden, bedient die MicroCell alle diese Ebenen gleichermaßen. Somit wird ein System durch das hinzufügen einer Microzelle durch Fähigkeiten aus allen Bereichen und Betrachtungsrichtungen erweitert.
+
+Jede MicroCell kapselt Fähigkeiten (Skills) ein Systemelements. Der Kern einer MicroCell ist dabei geschützt (IP Schutz des Entwickler Know how). Die Zelle ist nach Außen als Hülle über Interface (Skill-Interface). Die Hülle und Interface sind standardisiert, der Kern (die Umsetzung) ist individuell. Basis einer jeden MicroCell ist eine Art Stammzelle. Sie verkörpert die Fähigkeit eines Systems (Code), eine MicroCell zu sein. Alle Zellen können immer über dieses Basis-Skill-Interface genutzt werden.
 
 
 
