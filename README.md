@@ -3,18 +3,12 @@ Dezentrale Steuerungsarchitektur der OurPlant Maschinenplattform
 
 Wozu braucht es eine neue, eine andere Steuerungsarchitektur? Wohl stellt sich die Frage in Hinblick auf die Unmengen an Lösungen der Steuerungstechnik und der Softwarestrukturen. Und dennoch scheint es unter den Gesichtspunkten einer neuen Zeit Schranken in unserem Denken zu geben, die uns einen einfache evolutionäre Weiterentwicklung der bestehenden Basis verwehren.
 
-## Einführung in die OurPlant Architektur der MicroCells
+## Einführung in die Architekturentwicklung
 
 1. [Grundlos wird nicht's verändert](Grundlos wird nichts verändert.md)
 2. [Auf dem Weg zur neuen Architektur](Auf dem Weg zur neuen Architektur.md)
 
 ------
-
-## Inhaltsverzeichnis
-
-[TOC]
-
-
 
 # Grundlos wird sich nichts verändern
 Wozu braucht es eine neue, eine andere Steuerungsarchitektur? Wohl stellt sich die Frage im Hinblick auf die Unmengen an Lösungen der Steuerungstechnik und der Softwarestrukturen. Und dennoch scheint es unter den Gesichtspunkten einer neuen Zeit Schranken in unserem Denken zu geben, die uns einen einfache evolutionäre Weiterentwicklung der bestehenden Basis verhindert.
