@@ -14,7 +14,7 @@ Sie hat den Anspruch ganzheitlich auf die gesamte Herausforderung der Automatisi
 
 ## RAMI 4.0 zeigt die Dimensionen und das Ausmaß
 
-Das Referentarchitektur-Modell Indisustrie 4.0 (kurz  RAMI 4.0) stellt als dreidimensionales Schichtenmodell eine grundlegende Architektur für Industrie 4.0 dar. Es zeigt sehr anschaulich, dass sich die Architektur von Industrie 4.0 Systemen tatsächlich nicht nur über Hierarchien, Schichten und Gegenstände hinweg bezieht, sondern auch den zeitlichen Verlauf als Lebenszyklen oder Wertstrom mit einbezieht.
+Das [Referentarchitektur-Modell Industrie 4.0](https://de.wikipedia.org/wiki/Referenzarchitekturmodell_Industrie_4.0) (kurz  RAMI 4.0) stellt als dreidimensionales Schichtenmodell eine grundlegende Architektur für Industrie 4.0 zur Verfügung. Es zeigt sehr anschaulich, dass sich die Architektur von Industrie 4.0 Systemen tatsächlich nicht nur über Hierarchien, Schichten und Gegenstände hinweg bezieht, sondern auch den zeitlichen Verlauf als Lebenszyklen oder Wertstrom mit einbezieht.
 
 <img src="Illustration/RAMI4.0.png" alt="RAMI4.0" style="zoom:67%;" />
 
@@ -81,11 +81,11 @@ Diese Parallelen in die Organismen der Natur sind eine große Triebkraft für di
 
 <img src="Illustration/MicroCell einfach.png" alt="MicroCell einfach" style="zoom:67%;" />
 
-Dennoch geht die MircoCell einen bedeutenden Schritt weiter. Während sich MicroServices vorrangig in seiner Umsetzung nur der Dimension der Process-Logik widmen und die anderen systemischen Dimensionen auf anderen Lösungsebenen (UI, Saefty, Dokumente) wiederfinden, bedient die MicroCell alle diese Ebenen gleichermaßen. Somit wird ein System durch das hinzufügen einer Microzelle durch Fähigkeiten aus allen Bereichen und Betrachtungsrichtungen erweitert.
+Dennoch geht die MircoCell einen bedeutenden Schritt weiter. Während MicroServices sich vorrangig in seiner Umsetzung nur der Dimension der Process-Logik widmen und die anderen systemischen Dimensionen auf anderen Lösungsebenen (UI, Saefty, Dokumente) wiederfinden, bedient die MicroCell alle diese Ebenen gleichermaßen. Somit wird ein System durch das Hinzufügen einer Microzelle durch Fähigkeiten aus allen Bereichen und Betrachtungsrichtungen erweitert.
 
 Jede MicroCell kapselt Fähigkeiten (Skills) ein Systemelements. Der Kern einer MicroCell ist dabei geschützt (IP Schutz des Entwickler Know how). Die Zelle ist nach Außen als Hülle über Interface (Skill-Interface) sichtbar. Die Hülle und Interface sind standardisiert, der Kern (die Umsetzung) ist individuell. Basis einer jeden MicroCell ist eine Art Stammzelle. Sie verkörpert die Grundfähigkeit, eine MicroCell zu sein. Alle Zellen können immer über dieses Basis-Skill-Interface angesprochen und verwaltet werden.
 
-### Jede MicroCell hat's in sich
+### Alle MicroCells habens's in sich
 
 <img src="Illustration/Zellkern Schema.png" alt="Zellkern Schema" style="zoom:50%;" />
 
@@ -107,7 +107,7 @@ Der hierarchische Ansatz als Systemaufbau ergibt sich nur virtuell in der System
 
 ### Der Discovery Manager ist die "Root"
 
-Ein besondere Rolle kommt im virtuellen Systemaufbau dem Discovery Manager zu. Er ist die Wurzel (Root) und einzigste wirkliche Konstante des MicroCell Systems. Jede Zelle kann ihn und seine Fähigkeiten über den Aufruf von **Root** erreichen. Der Discovery Manager wird zu Beginn jeder Anwendung statisch gestartet und aufgefordert seine Struktur durch Restore zu reaktivieren. Er ist auch dafür verantwortlich, dass anschließend das System gestartet wird. Was immer das auch ist. Am Ende Ende Anwendung ist es auch der Discovery Manager der konstante Teil, der das System stoppt und alle Zelle inklusive sich selbst zum Sichern seiner Struktur auffordert. Der Discovery Manager ist natürlich auch eine Mikrozelle mit den Fähigkeiten eines Discovery Managers. Sie bringt Subzellen mit Systemfunktionen als abgesetzte (deposed) Skill Interface mit. Die wichtigste zusätzliche Fähigkeit ist das Zelltypenregister. Sie verwaltet alle registrierten Zellen mit Name und ID und wird zur Speicherung und Wiederhestellung von Zellen benötigt. Auch die Platzhalterverwaltung ist eine zusätzliche Fähigkeit, die an den Discovery Manager angedockt ist. Sie verwaltet die Verlinkung von Zellen in den Listen.
+Ein besondere Rolle kommt im virtuellen Systemaufbau dem Discovery Manager zu. Er ist die Wurzel (Root) und einzigste wirkliche Konstante des MicroCell Systems. Jede Zelle kann ihn und seine Fähigkeiten über den Aufruf von **Root** erreichen. Jede Zelle ist über ihn erreichbar. Der Discovery Manager wird zu Beginn jeder Anwendung statisch gestartet und aufgefordert seine Struktur durch Restore zu reaktivieren. Er ist auch dafür verantwortlich, dass anschließend das System gestartet wird. Was immer das auch ist. Am Ende einer Anwendung ist es auch der Discovery Manager der konstante Teil, der das System stoppt und alle Zelle inklusive sich selbst zum Sichern seiner Struktur auffordert. Der Discovery Manager selbst ist eine Mikrozelle mit den Fähigkeiten eines Discovery Managers. Er bringt Subzellen mit Systemfunktionen als abgesetzte (deposed) Skill Interface mit. Die wichtigste zusätzliche Fähigkeit ist das Zelltypenregister. Sie verwaltet alle registrierten Zellen mit Name und ID und wird zur Speicherung und Wiederhestellung von Zellen benötigt. Auch die Platzhalterverwaltung ist eine zusätzliche Fähigkeit, die an den Discovery Manager angedockt ist. Sie verwaltet die Verlinkung von Zellen in den Listen.
 
 ### Die Viewer Zellen sind das Fenster zur Bedienerwelt
 
@@ -131,7 +131,7 @@ Bei der Umsetzung von Fähigkeiten (skills) in Zellen, haben die Entwickler in i
 
 [zurück](README.md)
 
-# Lizenz
+------
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
 

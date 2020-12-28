@@ -1,9 +1,15 @@
 # Die MicroCell Architektur
-Die dezentrale Steuerungsarchitektur der OurPlant Maschinenplattform
+## Vorwort
 
 Wozu braucht es eine neue, eine andere Steuerungsarchitektur? Wohl stellt sich die Frage in Hinblick auf die Unmengen an Lösungen der Steuerungstechnik und der Softwarestrukturen. Und dennoch scheint es unter den Gesichtspunkten einer neuen Zeit Schranken in unserem Denken zu geben, die uns einen einfache evolutionäre Weiterentwicklung der bestehenden Basis verwehren.
 
-## Einführung in die Architekturentwicklung
+Never change a running system. Gilt sicher auch für die Entwicklung von neuen Systemen und Architekturen. Und so dürfen wir sicher davon ausgehen: Grundlos wird nicht's verändert. 
+
+Das Entwicklerteam der Häcker Automation kennt seit Jahren die Grenze der bestehenden Entwicklungsansätze. Die Hardware ist längst auf die neuen Anforderungen eingestellt. Auch das war kein ganz einfacher Weg. Modularität, Wandlungsfähigkeit und dezentrale mechatronische Systeme sind keinesfalls gängige Lösungsansätze des Maschinenbaues des späten 20-ten Jahrhunderts. Und dennoch ist es nach fast 25 Jahren gelungen, einen höchst modularen und austauschbaren Baukasten an unabhängigen Subsystemen aufzubauen. Der Softwareentwicklung war dieser gewaltige Schritt noch nicht gelungen. Ein organisch gewachsener Kern einer durchaus modular einstellbaren Gesamtlösung kommt imme häufiger an seine Grenzen. Überlagerte Funktionaltäten behindern und verfehlen sich mitunter. Eine Prüfbarkeit von scheinbar unendlich vielen Kombinationsmöglichkeiten der Hardwaremodule scheint chancenlos. 
+
+Wer da glaubt, man könne die Anwendungsfälle vorhersehen und überprüfen, der weiß noch nicht, was wandlungsfähig wirklich bedeutet. Maschinen der OurPant-Plattform, die heute gebaut werden, werden nach zehn Jahren noch im Einsatz sein und Produkte produzieren, von denen wir heute noch gar nichts ahnen. In unserer schnelllebigen Technologiewelt werden sie dann Aufgaben erfüllen, von denen wir jetzt noch nicht wissen.  
+
+## Architektur Entwicklung 4.0
 
 1. [Grundlos wird nicht's verändert](Grundlos wird nichts verändert.md)
 2. [Auf dem Weg zur neuen Architektur](Auf dem Weg zur neuen Architektur.md)
@@ -11,25 +17,23 @@ Wozu braucht es eine neue, eine andere Steuerungsarchitektur? Wohl stellt sich d
 ------
 
 # Grundlos wird sich nichts verändern
-Wozu braucht es eine neue, eine andere Steuerungsarchitektur? Wohl stellt sich die Frage im Hinblick auf die Unmengen an Lösungen der Steuerungstechnik und der Softwarestrukturen. Und dennoch scheint es unter den Gesichtspunkten einer neuen Zeit Schranken in unserem Denken zu geben, die uns einen einfache evolutionäre Weiterentwicklung der bestehenden Basis verhindert.
-
-Industrie 4.0 und Digitalisierung. Buzzer-Words der aktuellen Zeit verkünden sie eine Industrierevolution, deren Sinn und Grundgedanken nicht immer ganz offensichtlich sind. 
+Industrie 4.0 und Digitalisierung. Buzzer-Words der aktuellen Zeit verkünden eine Industrierevolution, deren Sinn und Grundgedanken nicht immer ganz offensichtlich sind. 
 
 <img src="Illustration/Revolution.png" alt="Revolution" style="zoom: 33%;" />
 
-Erstaunlich genug, dass führende Institute in Studien tiefgreifend untersuchen, ob es gar nur eine Industrie-Evolution sei und weniger einer Revolution. Sind wir doch allerorts in unserer modernen Industrie des 21. Jahrhunderts bereits schon längst digital ausgestattet und gut vernetzt. Und selbst dieser Text, geschrieben auf einen portablen Rechner angedockt an eine Cloud zum öffentlichen Verbreiten dieses Gedankengutes. Etwas Feintuning, einige Notepad in der Fertigung, höhenverstellbare Tische und ein guter Scanner zur Produktverfolgung. Fertig ist Industrie 4.0. Wer es glaubt kennt das eigentliche Motiv hinter der Digitalisierung und hinter Industrie 4.0 offensichtlich noch nicht. Prof. Dr. Piller der RWTH Aachen sagt:
+Erstaunlich genug, dass führende Institute in Studien tiefgreifend untersuchen, ob es sich tatsächlich um eine Revolution oder vielmehr nur um eine Industrie-Evolution handelt. Sind wir doch allerorts in unserer modernen Industrie des 21. Jahrhunderts bereits längst digital ausgestattet und gut vernetzt. Und selbst dieser Text, geschrieben auf einen portablen Rechner angedockt an eine Cloud zum öffentlichen Verbreiten dieses Gedankengutes. Etwas Feintuning, einige Notepad in der Fertigung, höhenverstellbare Tische und ein guter Scanner zur Produktverfolgung. Fertig ist Industrie 4.0. Wer es glaubt kennt das eigentliche Motiv hinter der Digitalisierung und hinter Industrie 4.0 offensichtlich noch nicht. [Prof. Dr. Frank Piller](https://de.wikipedia.org/wiki/Frank_Piller) der RWTH Aachen sagt:
 
-> Die Digitalisierung wird schneller Gewinner produzieren, als die Verlierer merken, dass sie Verlierer sind.
+> Die Digitalisierung wird schneller Gewinner produzieren, als die Verlierer wissen, dass sie Verlierer sind.
 
-Also sei allen Corsicht geboten, die sich allzu gern auf den Lorbeeren der deutschen Industriegeschichte ausruhen möchten. Oder mit den Worten von Peter Kruse: "Und bist Du nicht willig, dann brauch ich Geduld."
+Also sei allen Bewahrern Vorsicht geboten, die sich allzu gern auf den Lorbeeren der deutschen Industriegeschichte ausruhen möchten. Oder mit den Worten von [Peter Kruse](https://de.wikipedia.org/wiki/Peter_Kruse): ["Und bist Du nicht willig, dann brauch ich Geduld."](https://www.youtube.com/watch?v=e_94-CH6h-o)
 
 ## Digitalisierung und Industrie 4.0
 
-Wer sich mit der Fragestellung Digitalisierung oder Industrie 4.0 (gerne auch Wirtschaft oder Gesellschaft 4.0) der muss sich etwas aus der Mitte der Technik entfernen. Auch hier gilt: Never change a running system. Und so stellt im Gegenzuzug die Frage, warum so radikale Veränderungen, wie Revolution names Industrie 4.0, im Gange sein sollen. Den Grund dafür liefert bereits 2010 Yoram Koren vom MIT in seiner Arbeit über [The global manufacturing revolution](https://erc.engin.umich.edu/wp-content/uploads/sites/50/2013/08/12pgbook.pdf). 
+Wer sich mit der Fragestellung Digitalisierung oder Industrie 4.0 (gerne auch Wirtschaft oder Gesellschaft 4.0) beschäftigt, der muss sich etwas aus der Mitte der digitalen Technik entfernen. Es gilt: Never change a running system. Und so stellt sich die Frage, warum so radikale Veränderungen, wie Revolution names Industrie 4.0, im Gange sein sollen. Den Grund dafür liefert bereits 2010 [Yoram Koren](https://en.wikipedia.org/wiki/Yoram_Koren) vom MIT in seinem Buch [The global manufacturing revolution](https://erc.engin.umich.edu/wp-content/uploads/sites/50/2013/08/12pgbook.pdf). 
 
 <img src="Illustration/The global manufacturing revolution.png" alt="The global manufacturing revolution" style="zoom:45%;" />
 
-Letztendlich sind es die Bedürfnisse oder auch der vermakrtbare Nutzen, der alle Kräfte einer Wirtschaft und Industrie hervorbringt. Wer Bedürfnisse erfüllt, für die andere bereit sind, Geld zu zahlen, macht ein Geschäft. Wer das Bedürfnisse Vieler gleichzeitig erfüllen kann, macht das ganz große Geschäft. So entstand vor mehr als 150 Jahren das Industriezeitalter, den Wirtschaftlern als Taylorismus bekannt. Die Wertschöpfung verändert sich von der handwerklichen Manufaktur hin zur Massenproduktion. Henry Ford wollte jeden in die Lage versetzen, ein Automobil zu fahren. Hauptsache es war schwarz und hieß Ford T.
+Letztendlich sind es  vermakrtbarer Nutzen und Kundenbedürfnisse, die alle Kräfte einer Wirtschaft und Industrie hervorbringt. Wer Bedürfnisse erfüllt, für die andere bereit sind, Geld zu zahlen, macht ein Geschäft. Wer das Bedürfnisse Vieler gleichzeitig erfüllen kann, macht das ganz große Geschäft. So entstand vor mehr als 150 Jahren das Industriezeitalter, den Wirtschaftlern als Taylorismus bekannt. Die Wertschöpfung verändert sich von der handwerklichen Manufaktur hin zur Massenproduktion. Henry Ford wollte jeden in die Lage versetzen, ein Automobil zu fahren. Hauptsache es war schwarz und hieß Ford T.
 
 Seit dieser Zeit hat sich unsere Industrie, Ihre Prozesse und Methoden ständig verbessert. Am Gipfel der Massenproduktion kamen jedoch durch Wohlstand und Marktsättigung mehr und mehr die individuellen Bedürfnisse der Menschen durch. Seither befinden wir uns im Zeitalter des Mass-customzing. Industrialisiert und zu Preisen der Massenproduktion erwarten wir Konsumenten nicht irgend ein Produkt, sondern genau das Produkt unserer Vorstellungen. Natürlich sofort oder spätestens morgen.
 
@@ -61,7 +65,7 @@ Sie hat den Anspruch ganzheitlich auf die gesamte Herausforderung der Automatisi
 
 ## RAMI 4.0 zeigt die Dimensionen und das Ausmaß
 
-Das Referentarchitektur-Modell Indisustrie 4.0 (kurz  RAMI 4.0) stellt als dreidimensionales Schichtenmodell eine grundlegende Architektur für Industrie 4.0 dar. Es zeigt sehr anschaulich, dass sich die Architektur von Industrie 4.0 Systemen tatsächlich nicht nur über Hierarchien, Schichten und Gegenstände hinweg bezieht, sondern auch den zeitlichen Verlauf als Lebenszyklen oder Wertstrom mit einbezieht.
+Das [Referentarchitektur-Modell Industrie 4.0](https://de.wikipedia.org/wiki/Referenzarchitekturmodell_Industrie_4.0) (kurz  RAMI 4.0) stellt als dreidimensionales Schichtenmodell eine grundlegende Architektur für Industrie 4.0 zur Verfügung. Es zeigt sehr anschaulich, dass sich die Architektur von Industrie 4.0 Systemen tatsächlich nicht nur über Hierarchien, Schichten und Gegenstände hinweg bezieht, sondern auch den zeitlichen Verlauf als Lebenszyklen oder Wertstrom mit einbezieht.
 
 <img src="Illustration/RAMI4.0.png" alt="RAMI4.0" style="zoom:67%;" />
 
@@ -128,11 +132,11 @@ Diese Parallelen in die Organismen der Natur sind eine große Triebkraft für di
 
 <img src="Illustration/MicroCell einfach.png" alt="MicroCell einfach" style="zoom:67%;" />
 
-Dennoch geht die MircoCell einen bedeutenden Schritt weiter. Während sich MicroServices vorrangig in seiner Umsetzung nur der Dimension der Process-Logik widmen und die anderen systemischen Dimensionen auf anderen Lösungsebenen (UI, Saefty, Dokumente) wiederfinden, bedient die MicroCell alle diese Ebenen gleichermaßen. Somit wird ein System durch das hinzufügen einer Microzelle durch Fähigkeiten aus allen Bereichen und Betrachtungsrichtungen erweitert.
+Dennoch geht die MircoCell einen bedeutenden Schritt weiter. Während MicroServices sich vorrangig in seiner Umsetzung nur der Dimension der Process-Logik widmen und die anderen systemischen Dimensionen auf anderen Lösungsebenen (UI, Saefty, Dokumente) wiederfinden, bedient die MicroCell alle diese Ebenen gleichermaßen. Somit wird ein System durch das Hinzufügen einer Microzelle durch Fähigkeiten aus allen Bereichen und Betrachtungsrichtungen erweitert.
 
 Jede MicroCell kapselt Fähigkeiten (Skills) ein Systemelements. Der Kern einer MicroCell ist dabei geschützt (IP Schutz des Entwickler Know how). Die Zelle ist nach Außen als Hülle über Interface (Skill-Interface) sichtbar. Die Hülle und Interface sind standardisiert, der Kern (die Umsetzung) ist individuell. Basis einer jeden MicroCell ist eine Art Stammzelle. Sie verkörpert die Grundfähigkeit, eine MicroCell zu sein. Alle Zellen können immer über dieses Basis-Skill-Interface angesprochen und verwaltet werden.
 
-### Jede MicroCell hat's in sich
+### Alle MicroCells habens's in sich
 
 <img src="Illustration/Zellkern Schema.png" alt="Zellkern Schema" style="zoom:50%;" />
 
@@ -154,7 +158,7 @@ Der hierarchische Ansatz als Systemaufbau ergibt sich nur virtuell in der System
 
 ### Der Discovery Manager ist die "Root"
 
-Ein besondere Rolle kommt im virtuellen Systemaufbau dem Discovery Manager zu. Er ist die Wurzel (Root) und einzigste wirkliche Konstante des MicroCell Systems. Jede Zelle kann ihn und seine Fähigkeiten über den Aufruf von **Root** erreichen. Der Discovery Manager wird zu Beginn jeder Anwendung statisch gestartet und aufgefordert seine Struktur durch Restore zu reaktivieren. Er ist auch dafür verantwortlich, dass anschließend das System gestartet wird. Was immer das auch ist. Am Ende Ende Anwendung ist es auch der Discovery Manager der konstante Teil, der das System stoppt und alle Zelle inklusive sich selbst zum Sichern seiner Struktur auffordert. Der Discovery Manager ist natürlich auch eine Mikrozelle mit den Fähigkeiten eines Discovery Managers. Sie bringt Subzellen mit Systemfunktionen als abgesetzte (deposed) Skill Interface mit. Die wichtigste zusätzliche Fähigkeit ist das Zelltypenregister. Sie verwaltet alle registrierten Zellen mit Name und ID und wird zur Speicherung und Wiederhestellung von Zellen benötigt. Auch die Platzhalterverwaltung ist eine zusätzliche Fähigkeit, die an den Discovery Manager angedockt ist. Sie verwaltet die Verlinkung von Zellen in den Listen.
+Ein besondere Rolle kommt im virtuellen Systemaufbau dem Discovery Manager zu. Er ist die Wurzel (Root) und einzigste wirkliche Konstante des MicroCell Systems. Jede Zelle kann ihn und seine Fähigkeiten über den Aufruf von **Root** erreichen. Jede Zelle ist über ihn erreichbar. Der Discovery Manager wird zu Beginn jeder Anwendung statisch gestartet und aufgefordert seine Struktur durch Restore zu reaktivieren. Er ist auch dafür verantwortlich, dass anschließend das System gestartet wird. Was immer das auch ist. Am Ende einer Anwendung ist es auch der Discovery Manager der konstante Teil, der das System stoppt und alle Zelle inklusive sich selbst zum Sichern seiner Struktur auffordert. Der Discovery Manager selbst ist eine Mikrozelle mit den Fähigkeiten eines Discovery Managers. Er bringt Subzellen mit Systemfunktionen als abgesetzte (deposed) Skill Interface mit. Die wichtigste zusätzliche Fähigkeit ist das Zelltypenregister. Sie verwaltet alle registrierten Zellen mit Name und ID und wird zur Speicherung und Wiederhestellung von Zellen benötigt. Auch die Platzhalterverwaltung ist eine zusätzliche Fähigkeit, die an den Discovery Manager angedockt ist. Sie verwaltet die Verlinkung von Zellen in den Listen.
 
 ### Die Viewer Zellen sind das Fenster zur Bedienerwelt
 
@@ -176,7 +180,9 @@ Die oberste Zelle ist der Discovery Manager. Er wird im System als Root geführt
 
 Bei der Umsetzung von Fähigkeiten (skills) in Zellen, haben die Entwickler in ihrer Logik sicherzustellen, dass die vorgegebenen Informationen in den Skill-Interfacen den realen und erwarteten Verhalten des Systems nach Außen entspricht. Hierzu zählt auch die Umsetzung geeigneter Einstellmöglichkeiten oder Kalibrierfunktionalitäten. Eine Abgleich von Informationen außerhalb ist grundsätzlich in dezentralen Systemen nicht zulässig.  
 
-# Lizenz
+
+
+------
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
 
