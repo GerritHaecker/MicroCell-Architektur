@@ -182,4 +182,4 @@ Bei der Umsetzung von Fähigkeiten (skills) in Zellen, haben die Entwickler in i
 
 Dieses Werk **OurPlant MicroCell Architektur** von [Häcker Automation GmbH](https://www.haecker-automation.de/) ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Namensnennung - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz</a>
 
-Die Quellen dieser Arbeiten finden sich auf https://github.com/GerritHaecker/MicroCell-architecture
+Die Quellen dieser Arbeiten finden sich auf [Github](https://github.com/GerritHaecker/MicroCell-Architektur)

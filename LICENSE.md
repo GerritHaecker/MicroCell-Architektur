@@ -16,4 +16,4 @@ Die Quellen dieser Arbeiten finden sich auf https://github.com/GerritHaecker/Mic
 
 **OurPlant MicroCell Architecture** by the [Häcker Automation GmbH](https://www.haecker-automation.de/) is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
 
-Based on a work at https://github.com/GerritHaecker/MicroCell-architecture
+Based on a work at [Github](https://github.com/GerritHaecker/MicroCell-Architektur)
