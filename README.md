@@ -211,18 +211,18 @@ type
     ...
   end;
 
-	[RegisterCellType('cell','{09EDF8FC-2638-47F4-9332-928396A4F4B7}')]
+  [RegisterCellType('cell','{09EDF8FC-2638-47F4-9332-928396A4F4B7}')]
   TCellObject = class(TOurPlantObject, IsiCellObject)
   public
     procedure AfterConstruction; override;
     procedure CellConstruction; virtual;
     procedure BeforeDestruction; override;
-	strict protected
-		function siSelf: IsiCellObject;
+  strict protected
+    function siSelf: IsiCellObject;
     function siIsSame(aCell:IsiCellObject): Boolean;
     function siIsValid : Boolean;
-		...
-	end;	
+    ...
+  end;
 ```
 
 Im Verzeichnisbaum SKILLInterface sind alle Skill-Interface definiert. Das Beispiel des Digital Input Skills **IsiDigitalInput1** zeigt die Ableitung von IsiCellObject. Zu jedem Skill-Interface gehören vorgefertigte Zellen, die die Skill-Interface in andere Zellen implementieren können (später hierzu mehr). 
@@ -235,7 +235,7 @@ uses
 
 type
   IsiDigitalInput1 = interface(IsiCellObject)
-  	['{690960A1-EF15-4C6C-9CEB-76C30181727C}']
+  ['{690960A1-EF15-4C6C-9CEB-76C30181727C}']
     function siSize: Byte;
     function siBit(const aBit:Byte): Boolean;
     function siInteger: Integer;
@@ -245,7 +245,7 @@ type
   TsiDigitalInput1 = class(TCellObject, IsiDigitalInput1)
   public
     procedure CellConstruction; override;
-	strict protected
+  strict protected
     function siSize: Byte;
     function siBit(const aBit:Byte): Boolean;
     function siInteger: Integer;
