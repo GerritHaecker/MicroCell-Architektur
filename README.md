@@ -180,6 +180,92 @@ Die oberste Zelle ist der Discovery Manager. Er wird im System als Root geführt
 
 Bei der Umsetzung von Fähigkeiten (skills) in Zellen, haben die Entwickler in ihrer Logik sicherzustellen, dass die vorgegebenen Informationen in den Skill-Interfacen den realen und erwarteten Verhalten des Systems nach Außen entspricht. Hierzu zählt auch die Umsetzung geeigneter Einstellmöglichkeiten oder Kalibrierfunktionalitäten. Eine Abgleich von Informationen außerhalb ist grundsätzlich in dezentralen Systemen nicht zulässig.  
 
+------
+
+# Die MicroCells Architektur unter Embarcadero Delphi
+
+Die MicroCell Architektur wird erstmals in der [Delphi-Welt von Embarcadero](https://www.embarcadero.com/de/products/delphi) realisiert. Sie macht sich dabei stark die Interface Technologie zu nutze. 
+
+Für die Verwendung gelten strikte [Architekturkonventionen](Architektur Konventionen.md). Sie sind wichtige Vorraussetzung für eine dezentrale entwicklerunabhängige Architektur.
+
+Zur Umsetzung der MicroCell Architektur wird das TCellObject als Basisobjekt bzw. Stammzelle eingeführt. Das TCellObject implementiert ds Basis Skill-Interface IsiCellObject. Alle Mikrozellen sind von TCellObject oder einer Ableitung abzuleiten. Somit besitzt jede Mikrozelle zukünftig die Fähigkeiten des TCellObject indem sie das Skill-Interface IsiCellObject unterstützen. Alle weiteren Skill-Interface sind vom IsiCellObject oder einer Ableitung abzuleiten. Somit wird ebenfalls sichergestellt, dass alle Skill-Interface immer auch die Fähigkeiten des IsiCellObject's unterstützen. 
+
+<img src="Illustration/TCellObject und IsiCellObject Schema.png" alt="TCellObject und IsiCellObject Schema" style="zoom:85%;" />
+
+Kurz um: IsiCellObject ist der kleinste Nenner der MicroCell Architektur unter Delphi. Die Implementierung von IsiCellObject im TCellObject gewährleistet die Basisimplementierung aller darin enthalten Methoden und Eigenschaften.
+
+Die Unit OurPlant.Common.CellObject definiert das TCellObject und das Skill-Interface IsiCellOBject. Einige Details sind der Migration der Architektur in die bestehende OurPlant OS Architektur von 2020 geschuldet. So findet sich unter anderem eine Klasse TOurPlantObject mit dem Interface IsiOurPlantObject. Sie haben nur eine untergeordnete Rolle als Verbindungsschicht zwischen der "alten" Architektur und der neuen MircoCell Architektur.
+
+```pascal
+unit OurPlant.Common.CellObject;
+
+uses
+  OurPlant.Common.OurPlantObject;
+
+type
+  IsiCellObject = interface(IsiOurPlantObject)
+    ['{D9E6C14F-B154-4753-8769-EF00978805E9}']
+    function siSelf: IsiCellObject;
+    function siIsSame(aCell:IsiCellObject): Boolean;
+    function siIsValid : Boolean;
+    ...
+  end;
+
+	[RegisterCellType('cell','{09EDF8FC-2638-47F4-9332-928396A4F4B7}')]
+  TCellObject = class(TOurPlantObject, IsiCellObject)
+  public
+    procedure AfterConstruction; override;
+    procedure CellConstruction; virtual;
+    procedure BeforeDestruction; override;
+	strict protected
+		function siSelf: IsiCellObject;
+    function siIsSame(aCell:IsiCellObject): Boolean;
+    function siIsValid : Boolean;
+		...
+	end;	
+```
+
+Im Verzeichnisbaum SKILLInterface sind alle Skill-Interface definiert. Das Beispiel des Digital Input Skills **IsiDigitalInput1** zeigt die Ableitung von IsiCellObject. Zu jedem Skill-Interface gehören vorgefertigte Zellen, die die Skill-Interface in andere Zellen implementieren können (später hierzu mehr). 
+
+```pascal
+unit OurPlant.SKILLInterface.Periphery.DigitalInput;
+
+uses
+  OurPlant.Common.CellObject;
+
+type
+  IsiDigitalInput1 = interface(IsiCellObject)
+    ['{690960A1-EF15-4C6C-9CEB-76C30181727C}']
+    function siSize: Byte;
+    function siBit(const aBit:Byte): Boolean;
+    function siInteger: Integer;
+  end;
+
+  [RegisterCellType('digital input','{3018513D-066D-4BE4-A77C-96F61E1EF43A}')]
+  TsiDigitalInput1 = class(TCellObject, IsiDigitalInput1)
+  public
+    procedure CellConstruction; override;
+	strict protected
+    function siSize: Byte;
+    function siBit(const aBit:Byte): Boolean;
+    function siInteger: Integer;
+  end;
+```
+
+Das Objekt **TsiDigitalInput1** aus dem Beispiel ist vom **TCellObject** abgeleitet und implementiert zusätzlich die Fähigkeit des Skill-Interfaces **IsiDigitalInput1**. Über beide Pfade der Ableitung und Implementierung wird ebenfalls immer auch sichergestellt, dass die Zelle auch als bzw. über **IsiCellObject** angesprochen werden kann.
+
+## TCellObject und seine Erben
+
+Das Basisobject TCellObject und seine Erben repräsentieren eine Mikrozelle und somit das Subsystem einer Anwendung. Dies ist unabhängig von Umfang, Komplexität oder hierarchischer Einordnung des Subsystems im Gesamtsystem. Zellobjekte werden im Betrieb ausschließlich über Interface-Referenzierungen angesprochen und verwendet. Die Verwaltung der Zellen als Objekt-Instanzen ist nicht zulässig. Die Zellen werden ausschließlich unter den Konventionen der Interface-Technologie verendet. 
+
+<img src="Illustration/MicroCell TCellObject Schema.png" alt="MicroCell TCellObject Schema" style="zoom:75%;" />
+
+Zur entwicklerunabhängigen Nutzung der Zellen implementiert jede Zelle vereinheitlichte Skill-Interface. Die Skill-Interface sind von IsiCellObject als Basis-Skillinterface abgeleitet. Sie repräsentiert die Fähigkeit eines Objektes eine Mikrozelle zu sein.  Für die eigenen Realisierung von Logik und Verknüpfungen können Mikrozellen aber auch "private" Interface implementieren. Diese müssen sich namentlich jedoch von den Konventionen der "öffentlichen" Skill-Interfaces (**Isi**...SkillName...) unterscheiden.
+
+## IsiCellObject und mehr Skill-Interface
+
+
+
 
 
 ------
