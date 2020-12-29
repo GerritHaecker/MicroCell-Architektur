@@ -235,7 +235,7 @@ uses
 
 type
   IsiDigitalInput1 = interface(IsiCellObject)
-    ['{690960A1-EF15-4C6C-9CEB-76C30181727C}']
+  	['{690960A1-EF15-4C6C-9CEB-76C30181727C}']
     function siSize: Byte;
     function siBit(const aBit:Byte): Boolean;
     function siInteger: Integer;
