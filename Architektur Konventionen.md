@@ -12,13 +12,10 @@
 		OurPlant.Common.DiscoveryManager.pas
 		OurPlant.Common.DataCell.pas
 	/SKILLInterface
-		/System
-			OurPlant.SkillInterface.System.MainSystem.pas
-			OurPlant.SkillInterface
-		/Process
-			OurPlant.SkillInterface
-		/Periphery
-		/Data
+		OurPlant.SkillInterface.MainSystem.pas
+		OurPlant.SkillInterface.DataManager.pas
+		OurPlant.SkillInterface.DigitalInput.pas
+		OurPlant.SkillInterface.Viewer.pas
 	/CELLObject
 		/System
 		/Process
