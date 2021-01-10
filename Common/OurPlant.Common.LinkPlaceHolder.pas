@@ -38,7 +38,6 @@ interface
 {$REGION 'uses'}
 uses
   OurPlant.Common.CellObject,
-  OurPlant.Common.CellAttributes,
   OurPlant.Common.DataCell,
   OurPlant.Common.TypesAndConst;
 {$ENDREGION}
@@ -55,7 +54,7 @@ type
   {$ENDREGION}
 
   {$REGION 'TcoLinkPlaceHolderManager - cell object for link placeholder management'}
-  [RegisterCellType('placeholder manager','{045F27A6-6C1A-494D-BB48-14C71D89C877}')]
+  [RegisterCellType('Placeholder manager','{045F27A6-6C1A-494D-BB48-14C71D89C877}')]
   TcoPlaceHolderManager = class(TCellObject, IsiPlaceHolderManager)
   public
     /// <summary>
@@ -83,7 +82,7 @@ type
   {$ENDREGION}
 
   {$REGION 'TcoLinkPlaceHolder - cell object for link placeholder entry'}
-  [RegisterCellType('placeholder','{4B590D5C-A1BB-4AC9-B3AB-7E3232349E45}')]
+  //[RegisterCellType('Placeholder entry','{4B590D5C-A1BB-4AC9-B3AB-7E3232349E45}')]
   //[NoContentAtSubCellRequest]
   TcoLinkPlaceHolder = class(TcoString, IsiLinkPlaceHolder)
   strict protected
@@ -105,7 +104,7 @@ procedure TcoPlaceHolderManager.CellConstruction;
 begin
   inherited;
 
-  fSubCellContent := False; // nicht als sub cell content speichern
+  siIndependentCell; // nicht als sub cell content speichern
 end;
 
 function TcoPlaceHolderManager.siNewPlaceHolder( const aDestinationCell: IsiCellObject;

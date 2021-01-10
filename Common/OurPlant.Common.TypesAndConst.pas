@@ -29,9 +29,10 @@ const
   C_DEFAULT_FLOAT = 0;
   C_DEFAULT_BOOLEAN = False;
 
-  C_FLOAT_TOLERANZ = 0.0000001;
+  C_FLOAT_STR_FORMAT  = '#0.000';
+  C_FLOAT_TOLERANZ    = 0.0000001;
 
-  C_STRING_TYPE_NAME = 'String';
+  C_STRING_TYPE_NAME  = 'String';
 
   // JSON Pair Names
   C_PV_CELL           = 'cell';

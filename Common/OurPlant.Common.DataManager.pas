@@ -34,35 +34,25 @@ interface
 
 {$REGION 'uses'}
 uses
-  System.Rtti,
-  {$IF CompilerVersion >= 28.0}System.Json,{$ENDIF}
   OurPlant.Common.CellObject,
+  OurPlant.SkillInterface.DataManager,
   OurPlant.Common.DataCell,
-  OurPlant.Common.CellAttributes,
   OurPlant.Common.TypesAndConst;
 {$ENDREGION}
 
 const
-  C_STANDARD_FILE_DIR = 'C:\data\ourplant';
+  C_STANDARD_FILE_DIR = 'C:\ourplant\data';
   C_FILE_DELIMITER = '\';
   C_FILE_DEFAULT_NAME = 'index';
   C_FILE_DEFAULT_EXT = '.json';
 
 type
-  {$REGION 'IsiDataManager1 - Data manager skill interface Release 1'}
-  /// <summary>
-  ///  Data skill interface for data manager in Release 1
-  /// </summary>
-  IsiDataManager1 = interface(IsiCellObject)
-    ['{EE9289A8-B79C-4DB7-AEE4-197244A4EC27}']
-    procedure siSaveCellJSONContent(const aCell: IsiCellObject; const aName: string = '');
-    procedure siRestoreCellJSONContent(const aCell: IsiCellObject; const aName: string = '');
-  end;
-  {$ENDREGION}
 
   {$REGION 'TcoStandardDataManager - Standard Data Manager with JSON File'}
-  [RegisterCellType('standard data manager','{999FDEF4-BA2B-494A-87BF-085EA2E20538}')]
-  TcoStandardDataManager = class(TCellObject, IsiDataManager1)
+  [RegisterCellType('Standard data manager','{999FDEF4-BA2B-494A-87BF-085EA2E20538}')]
+  [UserInterface( )]
+
+  TcoStandardDataManager = class(TcoDataManager1, IsiDataManager1)
   public
     /// <summary>
     ///  construction of cell content & structures and set defaults
@@ -73,15 +63,17 @@ type
     procedure CellConstruction; override;
 
   strict protected
-    fDataRoot:IsiString;
+    [NewCell( TcoString, 'FileDir', C_STANDARD_FILE_DIR)]
+    [UserInterface( )]
+    fDataRoot : IsiString;
 
     function GetPathName(const aCell: IsiCellObject): string; virtual;
     function GetValidFileName(const aCell: IsiCellObject): string; overload;
     function GetValidFileName(const aCell: IsiCellObject; const aFileName: string): string; overload; virtual;
 
   strict protected // implementation IsiDataManager1
-    procedure siSaveCellJSONContent(const aCell: IsiCellObject; const aName: string = ''); overload; virtual;
-    procedure siRestoreCellJSONContent(const aCell: IsiCellObject; const aName: string = ''); overload; virtual;
+    procedure siSaveCellJSONContent(const aCell: IsiCellObject; const aName: string = ''); override;
+    procedure siRestoreCellJSONContent(const aCell: IsiCellObject; const aName: string = ''); override;
   end;
   {$ENDREGION}
 
@@ -89,6 +81,7 @@ implementation
 
 {$REGION 'uses'}
 uses
+  {$IF CompilerVersion >= 28.0}System.Json,{$ENDIF}
   System.IOUtils,
   System.SysUtils,
   Data.DBXJSON,
@@ -101,7 +94,7 @@ begin
   inherited;
 
   // construct fDataRoot as string cell
-  fDataRoot := ConstructNewCellAs<IsiString>( TcoString, 'FileDir');
+  //fDataRoot := ConstructNewCellAs<IsiString>( TcoString, 'FileDir');
   fDataRoot.siAsString := C_STANDARD_FILE_DIR; // set data to default
 end;
 
@@ -190,5 +183,8 @@ begin
   end;
 end;
 {$ENDREGION}
+
+initialization
+  TcoStandardDataManager.RegisterExplicit;
 
 end.

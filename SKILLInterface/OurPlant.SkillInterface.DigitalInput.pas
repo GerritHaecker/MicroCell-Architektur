@@ -1,19 +1,10 @@
-// *****************************************************************************
-//
-//                       OurPlant OS Architecture
-//                             for Delphi
-//                                2019
-//
-// Copyrights 2019 @ Häcker Automation GmbH
-// *****************************************************************************
-unit OurPlant.SKILLInterface.Periphery.DigitalInput;
+unit OurPlant.SkillInterface.DigitalInput;
 
 interface
 
 {$REGION 'uses'}
 uses
   OurPlant.Common.CellObject,
-  OurPlant.Common.CellAttributes,
   OurPlant.Common.DataCell;
 {$ENDREGION}
 
@@ -39,20 +30,36 @@ type
   end;
   {$ENDREGION}
 
-  {$REGION 'integrated skill interface implementation object of TsiDigitalInput1'}
+  {$REGION 'TsiDigitalInput1 - Universal adapter cell for IsiDigitalInput1'}
   /// <summary>
-  ///   Skill interface implemenation object of IsiDigitalInput (Release V1)
+  ///   The universal skill interface adapter cell for IsiDigitalInput1.
   /// </summary>
-  [RegisterCellType('digital input','{3018513D-066D-4BE4-A77C-96F61E1EF43A}')]
-  TsiDigitalInput1 = class(TSkillInterfaceCell, IsiDigitalInput1)
-  strict protected
-    fsiSize : IsiInteger;
-    fsiBit : IsiBoolean;
-    fsiBitAIndex : IsiInteger;
-    fsiInteger : IsiInteger;
+  [RegisterCellType('digital input', '{3018513D-066D-4BE4-A77C-96F61E1EF43A}' )]
+  TsiDigitalInput1 = class(TCellObject, IsiDigitalInput1)
   public
+    /// <summary>
+    ///   Construct the cell structure during after construction. This method
+    ///   override the virtual method of TCellObject.
+    /// </summary>
     procedure CellConstruction; override;
-    {$REGION 'IsiDigitalInput1 interface implementation'}
+  strict protected
+    /// <summary>
+    ///   Contain the siSize skill method cell
+    /// </summary>
+    fsiSize : IsiInteger;
+    /// <summary>
+    ///   Contain the siBit skill method cell
+    /// </summary>
+    fsiBit : IsiBoolean;
+    /// <summary>
+    ///   contain the aIndex skill para cell od siBit
+    /// </summary>
+    fsiBitAIndex : IsiInteger;
+    /// <summary>
+    ///   contain the siInteger skill method cell
+    /// </summary>
+    fsiInteger : IsiInteger;
+
     /// <summary>
     ///   Get size of Input channel in bit
     /// </summary>
@@ -65,29 +72,23 @@ type
     ///   read current value of input channel as Integer (signed long)
     /// </summary>
     function siInteger: Integer;
-    {$ENDREGION}
   end;
   {$ENDREGION}
 
-  {$REGION 'Deposed skill interface implementation object of TsiDigitalInput1'}
+  {$REGION 'TcoDigitalInput1 - Template cell for IsiDigitalInput1 implementation'}
   /// <summary>
-  ///   Skill interface implemenation object of IsiDigitalInput (Release V1)
+  ///   Prefefined cell object with skill interface implementation of
+  ///   IsiDigitalInput1
   /// </summary>
-  [RegisterCellType('digital input (deposed)','{3018513D-066D-4BE4-A77C-96F61E1EF43A}')]
-  TcoDigitalInput1 = class(TSkillInterfaceCell, IsiDigitalInput1)
-  strict protected
-    fsiSize : IsiInteger;            // skill method cell siSize
-    fsiBit : IsiBoolean;             // skill method cell siBit
-    fsiBitAIndex : IsiInteger;       // skill method parameter cell siSize/aIndex
-    fsiInteger : IsiInteger;         // skill method cell siInteger
-
+  TcoDigitalInput1 = class(TsiDigitalInput1, IsiDigitalInput1)
   public
     /// <summary>
     ///   Construct the cell structure during after construction. This method
     ///   override the virtual method of TCellObject.
     /// </summary>
     procedure CellConstruction; override;
-    {$REGION 'IsiDigitalInput1 interface implementation'}
+
+  strict protected
     /// <summary>
     ///   Get size of Input channel in bit
     /// </summary>
@@ -100,16 +101,23 @@ type
     ///   read current value of input channel as Integer (signed long)
     /// </summary>
     function siInteger: Integer; virtual; abstract;
-    {$ENDREGION}
-  private
-    {$REGION 'IsiDigitalInput1 skill method cell procedures'}
-    // siSize
+
+  strict private
+    /// <summary>
+    ///   On read event procedure to set in the siOnRead of skill method cell
+    ///   siSize
+    /// </summary>
     procedure OnGetSize(const aSender : IsiCellObject);
-    // siBit
+    /// <summary>
+    ///   On read event procedure to set in the siOnRead of skill method cell
+    ///   of siBit
+    /// </summary>
     procedure OnGetBit(const aSender : IsiCellObject);
-    // siInteger
+    /// <summary>
+    ///   On read event procedure to set in the siOnRead of skill method cell
+    ///   of siInteger
+    /// </summary>
     procedure OnGetInteger(const aSender : IsiCellObject);
-    {$ENDREGION}
   end;
   {$ENDREGION}
 
@@ -172,37 +180,10 @@ end;
 procedure TcoDigitalInput1.CellConstruction;
 begin
   inherited;
-
-  // construct the skill method structure: function siSize: Byte
-  fsiSize := ConstructNewCellAs<IsiInteger>(TcoInteger,'siSize');
   fsiSize.siOnRead := OnGetSize;
-
-  // construct the skill method structure: function siBit(const aBit : Byte) : Boolean
-  fsiBit := ConstructNewCellAs<IsiBoolean>(TcoBoolean,'siBit');
   fsiBit.siOnRead := OnGetBit;
-
-  // construct the skill method structure: property  siInteger : Integer
-  fsiInteger := ConstructNewCellAs<IsiInteger>(TcoInteger,'siInteger');
   fsiInteger.siOnRead := OnGetInteger;
-
 end;
-
-{ abstract method definition
-
-function TcoDigitalInput1.siSize: Byte;
-begin
-  Result := C_DEFAULT_SIZE;
-end;
-
-function TcoDigitalInput1.siBit(const aIndex : Byte): Boolean;
-begin
-  Result := C_DEFAULT_BIT;
-end;
-
-function TcoDigitalInput1.siInteger: Integer;
-begin
-  Result := C_DEFAULT_INTEGER;
-end;}
 
 procedure TcoDigitalInput1.OnGetSize(const aSender : IsiCellObject);
 begin
@@ -211,7 +192,7 @@ end;
 
 procedure TcoDigitalInput1.OnGetBit(const aSender : IsiCellObject);
 begin
-  fsiBit.siAsBoolean := siBit(fsiBitAIndex.siAsInteger);
+  fsiBit.siAsBoolean := siBit( fsiBitAIndex.siAsInteger);
 end;
 
 procedure TcoDigitalInput1.OnGetInteger(const aSender : IsiCellObject);

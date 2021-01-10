@@ -27,26 +27,9 @@
 // THE SOFTWARE.
 //
 // Authors History:
-//    Gerrit Häcker (2019 - 2020)
+//    Gerrit Häcker (2019 - 2021)
 // *****************************************************************************
 
-{-------------------------------------------------------------------------------
-   The Unit is the general part of the micro cell architecture for Delphi.
-
-   It contains:
-     * The skill interface "IsiCellObject" as the central interface
-       supported by all micro cells and origin of all skill interfaces
-
-     * The class "TCellObject" as the base cell and origin of all micro cells
-
-     * The pointer type "PsiCellObject", the pointer type that points to an
-         IsiCellObject interface
-
-     * And the class type "TCellClass", which describes a class of TCellObject
-
-     * TSkillInterfaceCell as derivate for skill interface cell use
-
--------------------------------------------------------------------------------}
 unit OurPlant.Common.CellObject;
 
 interface
@@ -58,8 +41,7 @@ uses
   {$IF CompilerVersion >= 28.0}System.Json,{$ENDIF}
   Data.DBXJSON,
   Classes,
-  OurPlant.Common.OurPlantObject,
-  OurPlant.Common.CellAttributes;
+  OurPlant.Common.OurPlantObject;
 {$ENDREGION}
 
 type
@@ -91,6 +73,55 @@ type
   /// <seealso cref="IsiCellObject.siOnRead" />
   /// <seealso cref="IsiCellObject.siOnWrite" />
   TOnCellProcedure = procedure (const aSender : IsiCellObject) of object;
+
+  POnCellProcedure = ^TOnCellProcedure;
+
+  {$ENDREGION}
+
+  {$REGION 'Register cell type attribute'}
+  /// <summary>
+  ///   Each Cell Object class must be registered as a cell type in the
+  ///   Discovery Manager registry. The registry is used to restore the
+  ///   installed cell after reboot. The RegisterCellTypeAttribute is also kept
+  ///   in the cell for storage of type-specific information.
+  /// </summary>
+  /// <remarks>
+  ///   Each cell type is given a type name and a GUID type. Both information
+  ///   must be unique. With CTRL + SHIFT + G to create a new GUID. This short
+  ///   key creates a GUID (usually for interfaces). Here, the square brackets
+  ///   must be removed afterwards.
+  /// </remarks>
+  /// <example>
+  ///   <para>
+  ///     [RegisterCellType('Integer','{5F30064A-2628-40EF-BFC2-F220A4754D49}')]
+  ///     <br />TcoInteger = <b>class</b>(TCellObject, IsiInteger)
+  ///   </para>
+  ///   <para>
+  ///     <b>end; <br /></b>
+  ///   </para>
+  /// </example>
+  RegisterCellTypeAttribute = class(TCustomAttribute)
+  public
+    /// <summary>
+    ///   The type GUID of cell
+    /// </summary>
+    TypeGuid : TGUID;
+    /// <summary>
+    ///   The cell type name.
+    /// </summary>
+    TypeName : string;
+    /// <summary>
+    ///   Create the RegisterCellAttribute with cell type name and cell type
+    ///   GUID.
+    /// </summary>
+    /// <param name="aName">
+    ///   the unique cell type name
+    /// </param>
+    /// <param name="aGuidString">
+    ///   the GUID of cell type
+    /// </param>
+    constructor Create(const aName: string; const aGuidString:string); overload;
+  end;
   {$ENDREGION}
 
   {$REGION 'IsiCellObject - Base Skill Interface'}
@@ -155,7 +186,6 @@ type
     ///   get the name of cell for displaying (name and controller name)
     /// </summary>
     function siDisplayName: string;
-
     /// <summary>
     ///   <para>
     ///     The long name of a cell describes the cell name in its structure tree.
@@ -200,6 +230,13 @@ type
     ///   siController property read / write the controller cell instance as IsiCellObject
     /// </summary>
     property siController:IsiCellObject read siGetController write siSetController;
+
+    /// <summary>
+    ///   Turn of the option of this cell that the content can be saved in the
+    ///   controller cell. This option is the jois, when the content will saved
+    ///   self, should be hid or has no restorable content.
+    /// </summary>
+    procedure siIndependentCell;
     {$ENDREGION}
 
     {$REGION 'Sub cell list operations'}
@@ -859,7 +896,7 @@ type
   ///   The parameters must be type name and type GUID. A new unique GUID can be
   ///   created via CTRL + SHIFT + G. The square brackets must be removed manually.
   /// </remarks>
-  [RegisterCellType('cell','{09EDF8FC-2638-47F4-9332-928396A4F4B7}')]
+  [RegisterCellType('Standard Cell','{09EDF8FC-2638-47F4-9332-928396A4F4B7}')]
   TCellObject = class(TOurPlantObject, IsiCellObject)
   strict protected
     {$REGION 'TsiCellObject protected internal vars'}
@@ -945,20 +982,62 @@ type
     /// </summary>
     class function IsValid( const aCell : IsiCellObject) : boolean;
     /// <summary>
+    ///   check the valid of a cell (Assigning and supports as IsiCellObject
+    ///   and has a controller) and get the reference as IsiCellObject
+    /// </summary>
+    class function ValidCell( const aCell : IsiCellObject) : IsiCellObject;
+
+    /// <summary>
+    ///   Get the cell reference as IsiCellObject of long name beginning from
+    ///   root, when exist
+    /// </summary>
+    class function NamedCell( const aLongName : string) : IsiCellObject;
+
+    /// <summary>
+    ///   check the assign of the cell interface reference, the control of the
+    ///   cell and that the cell supports the typed skill interface and get
+    ///   the reference as typed skill interface
+    /// </summary>
+    class function CellAs<T : IsiCellObject>( const aCell : IsiCellObject) : T; overload;
+    /// <summary>
+    ///   check the assign of the long named cell from root beginning, the control of the
+    ///   cell and that the cell supports the typed skill interface and get
+    ///   the reference as typed skill interface
+    /// </summary>
+    class function CellAs<T : IsiCellObject>( const aLongName : string) : T; overload;
+    /// <summary>
+    ///   check the assign of the long named cell in given cell reference, the control of the
+    ///   cell and that the cell supports the typed skill interface and get
+    ///   the reference as typed skill interface
+    /// </summary>
+    class function CellAs<T : IsiCellObject>( const aCell : IsiCellObject; const aLongName : string) : T; overload;
+
+    /// <summary>
     ///   check the assign of the cell interface reference, the control of the
     ///   cell and that the cell supports the typed skill interface
     /// </summary>
-    class function IsValidAs<T : IsiCellObject>( const aCell : IsiCellObject) : Boolean; overload;
+    class function TryCellAs<T : IsiCellObject>( const aCell : IsiCellObject) : Boolean; overload;
     /// <summary>
     ///   check the assign of the cell interface reference, the control of the
     ///   cell and that the cell supports the typed skill interface and get in aResult
     /// </summary>
-    class function IsValidAs<T : IsiCellObject>( const aCell : IsiCellObject; out aResult : T) : Boolean; overload;
+    class function TryCellAs<T : IsiCellObject>( const aCell : IsiCellObject; out aResult : T) : Boolean; overload;
 
     /// <summary>
     ///  get the first valid reference of cell or sub cell from the type skill interface
     /// </summary>
-    class function CellSkill<T : IsiCellObject>( const aCell : IsiCellObject) : T;
+    class function CellSkill<T : IsiCellObject>( const aCell : IsiCellObject) : T; overload;
+    /// <summary>
+    ///  get the first valid reference of long named cell or sub cell from the
+    ///  type skill interface. Search long name in root.
+    /// </summary>
+    class function CellSkill<T : IsiCellObject>( const aLongName : string) : T; overload;
+    /// <summary>
+    ///  get the first valid reference of long named cell or sub cell from the
+    ///  type skill interface. Search long name in given cell reference.
+    /// </summary>
+    class function CellSkill<T : IsiCellObject>( const aCell : IsiCellObject; const aLongName : string) : T; overload;
+
     /// <summary>
     ///  check precence and validation of typed skill interface in cell or in sub cell list of cell
     /// </summary>
@@ -1299,6 +1378,12 @@ type
     ///   siController property read / write the controller cell instance as IsiCellObject
     /// </summary>
     property siController:IsiCellObject read siGetController write siSetController;
+    /// <summary>
+    ///   Turn of the option of this cell that the content can be saved in the
+    ///   controller cell. This option is the jois, when the content will saved
+    ///   self, should be hid or has no restorable content.
+    /// </summary>
+    procedure siIndependentCell;
     {$ENDREGION}
 
     {$REGION 'IsiCellObject implementation - Sub cell list operations'}
@@ -1914,12 +1999,31 @@ type
   end;
   {$ENDREGION}
 
-  {$REGION 'General derivatives as general cell objects'}
-  [RegisterCellType('skill cell','{FCC5A68D-20B4-4C40-B00E-806628FDEAB7}')]
-  TSkillInterfaceCell = class(TCellObject)
+  {$REGION 'Attributes for cell construction'}
+  NewCellAttribute = class(TCustomAttribute)
   public
-    procedure CellConstruction; override;
+    DestinationName: string;
+    NewCellName: string;
+    Default : string;
+    CellClass: TCellClass;
+    constructor Create( const aClass : TCellClass; const aLongName: string; const aValue : string = ''); overload;
+    constructor Create( const aClass : TCellClass; const aLongName: string; const aValue : Integer); overload;
+    constructor Create( const aClass : TCellClass; const aLongName: string; const aValue : Boolean); overload;
+    constructor Create( const aClass : TCellClass; const aLongName: string; const aValue : Extended); overload;
   end;
+
+  IndependentCellAttribute = class(NewCellAttribute);
+
+  OnReadCellAttribute = class(TCustomAttribute)
+  public
+    LongName : string;
+    constructor Create( const aLongName : string);
+  end;
+
+  OnWriteCellAttribute = class(OnReadCellAttribute);
+
+  UserInterface = class(TCustomAttribute);
+
   {$ENDREGION}
 
 implementation
@@ -1947,7 +2051,22 @@ begin
   Result := Assigned(aCell) and aCell.siIsValid;
 end;
 
-class function TCellObject.IsValidAs<T>( const aCell : IsiCellObject) : Boolean;
+class function TCellObject.ValidCell( const aCell : IsiCellObject) : IsiCellObject;
+begin
+  if IsValid(aCell) then
+    Result := aCell
+  else
+    raise Exception.Create( 'No valid cell at ValidCell request');
+end;
+
+class function TCellObject.NamedCell( const aLongName : string) : IsiCellObject;
+begin
+  Result := Root.siFindCell(aLongName);
+  if not Assigned(result) then
+    raise Exception.CreateFmt( 'No valid cell with long name %s found in sub cell structure of root', [aLongName]);
+end;
+
+class function TCellObject.TryCellAs<T>( const aCell : IsiCellObject) : Boolean;
 var
   vTypeInfo : PTypeInfo;
   vIntf     : T;
@@ -1956,12 +2075,55 @@ begin
   Result := IsValid( aCell ) and (aCell.QueryInterface( vTypeInfo.TypeData.Guid, vIntf) = 0);
 end;
 
-class function TCellObject.IsValidAs<T>( const aCell : IsiCellObject; out aResult : T) : Boolean;
+class function TCellObject.TryCellAs<T>( const aCell : IsiCellObject; out aResult : T) : Boolean;
 var
   vTypeInfo : PTypeInfo;
 begin
   vTypeInfo := TypeInfo( T );
   Result := IsValid( aCell ) and (aCell.QueryInterface( vTypeInfo.TypeData.Guid, aResult) = 0);
+end;
+
+class function TCellObject.CellAs<T>( const aCell : IsiCellObject) : T;
+var
+  vTypeInfo : PTypeInfo;
+begin
+  if not TryCellAs<T>( aCell, Result) then
+  begin
+    vTypeInfo := TypeInfo( T );
+    raise Exception.CreateFmt( 'No valid cell at skill request of %s', [vTypeInfo.Name]);
+  end;
+end;
+
+class function TCellObject.CellAs<T>( const aLongName : string) : T;
+var
+  vTypeInfo : PTypeInfo;
+begin
+  if not TryCellAs<T>( NamedCell(aLongName), Result ) then
+  begin
+    vTypeInfo := TypeInfo( T );
+    raise Exception.CreateFmt( 'No valid cell with long name %s and supported skill of %s',
+     [ aLongName, vTypeInfo.Name]);
+  end;
+end;
+
+class function TCellObject.CellAs<T>( const aCell : IsiCellObject; const aLongName : string) : T;
+var
+  vTypeInfo : PTypeInfo;
+begin
+  if isValid(aCell) then
+  begin
+    if not TryCellAs<T>( aCell.siFindCell( aLongName), Result ) then
+    begin
+      vTypeInfo := TypeInfo( T );
+      raise Exception.CreateFmt( 'No valid cell with long name %s and supported skill of %s',
+        [ aLongName, vTypeInfo.Name]);
+    end;
+  end
+  else
+  begin
+    vTypeInfo := TypeInfo( T );
+    raise Exception.CreateFmt( 'No assigned cell at skill request of %s', [vTypeInfo.Name]);
+  end;
 end;
 
 class function TCellObject.CellSkill<T>( const aCell : IsiCellObject) : T;
@@ -1978,13 +2140,44 @@ begin
     raise Exception.CreateFmt( 'No valid cell at skill request of %s', [vTypeInfo.Name]);
 end;
 
+class function TCellObject.CellSkill<T>( const aLongName : string) : T;
+var
+  vTypeInfo : PTypeInfo;
+begin
+  if not TryCellSkill<T>( NamedCell(aLongName), Result ) then
+  begin
+    vTypeInfo := TypeInfo( T );
+    raise Exception.CreateFmt( 'no valid cell with long name %s in root or no supported skill interface %s',
+     [ aLongName, vTypeInfo.Name] );
+  end
+end;
+
+class function TCellObject.CellSkill<T>( const aCell : IsiCellObject; const aLongName : string) : T;
+var
+  vTypeInfo : PTypeInfo;
+begin
+  if isValid(aCell) then
+  begin
+    if not TryCellSkill<T>( aCell.siFindCell( aLongName), Result ) then
+    begin
+      vTypeInfo := TypeInfo( T );
+      raise Exception.CreateFmt( 'No valid cell with long name %s and supported skill of %s',
+        [ aLongName, vTypeInfo.Name]);
+    end;
+  end
+  else
+  begin
+    vTypeInfo := TypeInfo( T );
+    raise Exception.CreateFmt( 'No assigned cell at skill request of %s', [vTypeInfo.Name]);
+  end;
+end;
+
 class function TCellObject.TryCellSkill<T>( const aCell : IsiCellObject) : Boolean;
 var
   vTypeInfo : PTypeInfo;
   vIntf     : T;
 begin
   vTypeInfo := TypeInfo( T );
-
   Result := IsValid( aCell) and aCell.siSkillInterface( vTypeInfo.TypeData.Guid, @vIntf) and Assigned(vIntf);
 end;
 
@@ -2093,21 +2286,135 @@ end;}
 
 procedure TCellObject.AfterConstruction;
 var
-  vAttribute: RegisterCellTypeAttribute;
+  vClassType :    TRttiType;
+  vRegAttribute : RegisterCellTypeAttribute;
+  vFields :       TArray<TRTTIField>;
+  vFieldCount :   Integer;
+  vField :        TRTTIField;
+  vAttributes :   TArray<TCustomAttribute>;
+  vAttribute :    TCustomAttribute;
+  vAttrCount :    Integer;
+  vFieldGUID :    TGUID;
+  vpField :       PsiCellObject;
+  vSubCell :      IsiCellObject;
+  vCell :         IsiCellObject;
+  //vMethods :      TArray<TRttiMethod>;
+  //vMethodCount :  Integer;
+  //vMethod :       TRttiMethod;
+  //vPointer :      Pointer;
+  //vOnCellAction : POnCellProcedure;
 begin
+  vClassType := RootSkill<IsiRTTI>.siRTTI.GetType(ClassType);
 
   // suche nach der Registrierung
-  if FindAttribute<RegisterCellTypeAttribute>(
-   RootSkill<IsiRTTI>.siRTTI.GetType(ClassType),vAttribute) then
-   begin
-     fCellTypeName := vAttribute.TypeName;
-     fCellTypeGuid := vAttribute.TypeGuid;
-   end
-   else
-   begin
-     fCellTypeName := '';
-     fCellTypeGuid := TGUID.Empty;
-   end;
+  if Assigned(vClassType) and FindAttribute<RegisterCellTypeAttribute>( vClassType, vRegAttribute) then
+  begin
+    fCellTypeName := vRegAttribute.TypeName;
+    fCellTypeGuid := vRegAttribute.TypeGuid;
+
+    // lade alle Felder des Objectes
+    vFields := vClassType.GetFields;
+    for vFieldCount := 0 to High(vFields) do
+    begin
+      vField := vFields[ vFieldCount];
+
+      // lade alle Attribute des Feldes
+      vAttributes:= vField.GetAttributes;
+      for vAttrCount := 0 to High(vAttributes) do
+      begin
+        vAttribute:= vAttributes[vAttrCount];
+
+        // Konstruiere eine neue Subzelle und ordne sie dem Feld zu
+        if vAttribute is NewCellAttribute then
+        begin
+          // Feld muss vom Typ Interface sein und Attribut->Klasse muss ein Zellobjekt erzeugen
+          if ( vField.FieldType.TypeKind = tkInterface) and
+             Supports( NewCellAttribute(vAttribute).CellClass, IsiCellObject) then
+          begin
+            vFieldGUID := System.TypInfo.GetTypeData(vField.FieldType.Handle)^.Guid;
+
+            // das Feld muss auch Interface des neues neuen Zellobjekts unterstützen
+            if Supports( NewCellAttribute(vAttribute).CellClass, vFieldGUID) then
+            begin
+              // Zuweisung der Feldadresse als Pointer of IsiCellObject
+              vpField := PsiCellObject( PByte( Self) + vField.Offset);
+
+              // Prüfe, ob die neue Instance vom identischen Interfacetyp, wie das Feld
+              if Supports( NewCellAttribute(vAttribute).CellClass.Create, vFieldGUID, vSubCell) then
+              begin
+                if NewCellAttribute( vAttribute).NewCellName <> '' then
+                  vSubCell.siName := NewCellAttribute( vAttribute).NewCellName
+                else
+                  vSubCell.siName := vField.Name;
+
+                if NewCellAttribute( vAttribute).Default <> '' then
+                  vSubCell.siAsString := NewCellAttribute( vAttribute).Default;
+
+                if vAttribute is InDependentCellAttribute then
+                  vSubCell.siIndependentCell;
+
+                vpField^ := vSubCell;
+
+                if NewCellAttribute( vAttribute).DestinationName <> '' then
+                  vCell:= siFindCell( NewCellAttribute( vAttribute).DestinationName)
+                else
+                  vCell:= siSelf;
+
+                if Assigned( vCell) then
+                  vCell.siConstructSubCell( vSubCell);
+
+              end;
+            end;
+          end;
+        end;
+      end;
+    end;
+
+    // lade alle Methoden des Objectes
+    {vMethods:=vClassType.GetMethods;
+    for vMethodCount := 0 to High(vMethods) do
+    begin
+      vMethod:=vMethods[vMethodCount];
+
+      // lese die Attribute der Methoden aus
+      vAttributes:=vMethod.GetAttributes;
+      for vAttrCount := 0 to High(vAttributes) do
+      begin
+        vAttribute:=vAttributes[vAttrCount];
+
+        if vAttribute is OnReadCellAttribute then
+        begin
+          // Plausibilität der Methode prüfen
+          if (vMethod.MethodKind = mkProcedure) and ( Length(vMethod.GetParameters) = 1 ) then
+          begin
+            vSubCell:=siFindCell( OnReadCellAttribute(vAttribute).LongName );
+            // Gültigkeit der ZielZelle prüfen
+            if IsValid( vSubCell) then
+            begin
+              vPointer := vMethod.CodeAddress;
+
+              //vPointer := PByte( Self) + vMethod.CodeAddress;
+              //vOnCellAction := POnCellProcedure( vPointer);
+
+              if vAttribute is OnWriteCellAttribute then
+                vSubCell.siOnWrite := TOnCellProcedure(vMethod.CodeAddress^) //TOnCellProcedure(vPointer)
+              else
+                vSubCell.siOnRead := TOnCellProcedure(vMethod.CodeAddress^);
+            end;
+          end;
+        end;
+      end;
+    end;}
+
+    vCell:=nil;                    // warum auch immer, führt das nicht freigeben des
+    vSubCell:=nil;                 // temp. InterfaceZeiger zu einem Fehler ?!?
+
+  end
+  else
+  begin
+    fCellTypeName := '';
+    fCellTypeGuid := TGUID.Empty;
+  end;
 
   // run the cell construction routine
   CellConstruction;
@@ -2383,6 +2690,12 @@ begin
 
   fController:=Pointer(aCell);
 end;
+
+procedure TCellObject.siIndependentCell;
+begin
+  fSubCellContent := False;
+end;
+
 
 {$ENDREGION}
 
@@ -3298,13 +3611,41 @@ end;
 
 {$ENDREGION}
 
-{$REGION 'implementation of first derivatives'}
-procedure TSkillInterfaceCell.CellConstruction;
+{$REGION 'Implementation of Attributes for cell construction'}
+constructor RegisterCellTypeAttribute.Create( const aName: string; const aGuidString: string);
 begin
-  inherited;
-  fSubCellContent := false;
+  TypeName:=aName;
+  TypeGuid:=StringToGuid(aGuidString);
+end;
+
+constructor NewCellAttribute.Create( const aClass : TCellClass; const aLongName: string; const aValue : string = '');
+begin
+  CellClass := aClass;
+  Default := aValue;
+  NewCellName:= LongNameSeparateRight(aLongName,DestinationName);
+end;
+
+constructor NewCellAttribute.Create( const aClass : TCellClass; const aLongName: string; const aValue : integer);
+begin
+  create( aClass, aLongName, IntToStr( aValue));
+end;
+
+constructor NewCellAttribute.Create( const aClass : TCellClass; const aLongName: string; const aValue : Boolean);
+begin
+  create( aClass, aLongName, BoolToStr( aValue, true));
+end;
+
+constructor NewCellAttribute.Create( const aClass : TCellClass; const aLongName: string; const aValue : Extended);
+begin
+  create( aClass, aLongName, FormatFloat(C_FLOAT_STR_FORMAT, aValue));
+end;
+
+constructor OnReadCellAttribute.Create( const aLongName : string);
+begin
+  LongName := aLongName;
 end;
 
 {$ENDREGION}
+
 
 end.

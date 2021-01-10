@@ -37,10 +37,9 @@ uses
   OurPlant.Common.CellObject,
   OurPlant.Common.CellTypeRegister,
   OurPlant.Common.LinkPlaceHolder,
-  OurPlant.Common.CellAttributes,
-  OurPlant.Common.DataManager,
   OurPlant.Common.DataCell,
   OurPlant.Common.TypesAndConst,
+  OurPlant.SKILLInterface.DataManager,
   System.Rtti,
   System.SysUtils;
 {$ENDREGION}
@@ -55,7 +54,7 @@ type
     /// <summary>
     ///   Get the skill interface reference for (main) data manager of discovery manger
     /// </summary>
-    function siGetDataManager: IsiDataManager1;
+    function siGetDataManager : IsiDataManager1;
     /// <summary>
     ///   Set the skill interface reference for (main) data manager of discovery manger
     /// </summary>
@@ -97,9 +96,8 @@ type
   ///  Controll the List, give references about all instances
   ///  load und restore the system
   /// </summary>
-  [RegisterCellType('discovery manager','{B2C66E5D-F763-4E09-A8EE-EC4ABFFEF706}')]
+  [RegisterCellType('Discovery manager','{B2C66E5D-F763-4E09-A8EE-EC4ABFFEF706}')]
   TcoDiscoveryManager = class(TCellObject, IsiDiscoveryManager, IsiRTTI, IsiDataManager1)
-   //IsiCellTypeRegister, IsiDataManager1 , IsiPlaceHolderManager )
   public // commons
     /// <summary>
     ///   <para>
@@ -131,7 +129,7 @@ type
     /// <summary>
     ///   contains the common data manager as IsiDataManager1
     /// </summary>
-    fsiDataManager : IsiCellReference;
+    fDataManagerRef : IsiCellReference;
     /// <summary>
     ///   Contains the cell type register as IsiCellTypeRegister.
     /// </summary>
@@ -144,9 +142,6 @@ type
     ///   Contains the open instance of RTTI context.
     /// </summary>
     fRTTIContext : TRttiContext;
-
-    procedure OnSiSaveSystem( const aSender : IsiCellObject);
-    procedure OnSiRestoreSystem( const aSender : IsiCellObject);
 
   strict protected // implementations
     /// <summary>
@@ -195,13 +190,18 @@ type
     ///  Implementation of IsiRTTI
     /// </summary>
     function siRTTI : TRttiContext;
+
+  strict protected // OnAction Methoden der Skill Cells
+    procedure OnSaveSystem( const aSender : IsiCellObject);
+    procedure OnRestoreSystem( const aSender : IsiCellObject);
   end;
   {$ENDREGION}
 
 implementation
 
 {$REGION 'uses'}
-
+uses
+  OurPlant.Common.DataManager;
 {$ENDREGION}
 
 {$REGION 'Cell Discovery Manager implemenation'}
@@ -212,8 +212,8 @@ begin
   // SYSTEM Methoden des Discovery Manager (Sonderbehandlung)
   fRTTIContext := TRttiContext.Create;
 
-  fCellTypeRegister := ConstructNewCellAs<IsiCellTypeRegister>( TcoCellTypeRegister, 'siTypeRegister');
-  fPlaceHolderManager := ConstructNewCellAs<IsiPlaceHolderManager>( TcoPlaceHolderManager, 'siPlaceHolderManager');
+  fCellTypeRegister := ConstructNewCellAs<IsiCellTypeRegister>( TcoCellTypeRegister, 'TypeRegister');
+  fPlaceHolderManager := ConstructNewCellAs<IsiPlaceHolderManager>( TcoPlaceHolderManager, 'PlaceHolderManager');
 
   // inherited muss hinter fInstance und Context stehen, da TCellObject darauf zugreift
   inherited;
@@ -222,18 +222,27 @@ end;
 procedure TcoDiscoveryManager.CellConstruction;
 begin
   inherited;
-
   // konstruiert die skill method siDataManger von IsiDiscoveryManager as IsiCellReference
-  fsiDataManager := ConstructNewCellAs<IsiCellReference>(TcoCellReference,'siDataManager');
-  // trägt als default Reference den Standard Data Manager ein
-  fsiDataManager.siAsCell := ConstructNewCell( TcoStandardDataManager, 'StandardDataManager');
+  // die skill method siDataManager ist gleichzeitig auch die gespeichert Ref. vom
+  // gewählten DataManagers, trägt danach als default einen neuen Standard Data Manager ein
+  fDataManagerRef := ConstructNewCellAs<IsiCellReference>(TcoCellReference,'siDataManager');
+  fDataManagerRef.siAsCell := ConstructNewCell( TcoStandardDataManager, 'StandardDataManager');
 
-  ConstructNewCell(TSkillInterfaceCell, 'siSaveSystem').siOnRead := OnSiSaveSystem;
-  ConstructNewCell(TcoString, 'siSaveSystem/aName').siAsString := '';
+  // lege die Skill-Methode siSaveSystem + siSaveSystem/aName an und setzte
+  with ConstructNewCell(TCellObject, 'siSaveSystem') do
+  begin
+    siConstructNewSubCell(TcoString, 'aName').siAsString := '';
+    siOnRead := OnSaveSystem;
+    siIndependentCell;
+  end;
 
-  ConstructNewCell(TSkillInterfaceCell, 'siRestoreSystem').siOnRead := OnSiRestoreSystem;
-  ConstructNewCell(TcoString, 'siRestoreSystem/aName').siAsString := '';
-
+  // lege die Skill-Methode siRestoreSystem + siRestoreSystem/aName an und setzte
+  with ConstructNewCell(TCellObject, 'siRestoreSystem') do
+  begin
+    siConstructNewSubCell(TcoString, 'aName').siAsString := '';
+    siOnRead := OnRestoreSystem;
+    siIndependentCell;
+  end;
 end;
 
 procedure TcoDiscoveryManager.BeforeDestruction;
@@ -256,16 +265,17 @@ end;
 
 function TcoDiscoveryManager.siGetDataManager: IsiDataManager1;
 begin
-  Assert( isValidAs<IsiDataManager1>(fsiDataManager.siAsCell, Result),
-   'No Data manager in siGetDataManager of DiscoveryManager');
+  if not TryCellAs<IsiDataManager1>(fDataManagerRef.siAsCell, Result) then
+    raise Exception.Create(
+     'No Data manager setted in siGetDataManager of DiscoveryManager');
 end;
 
 procedure TcoDiscoveryManager.siSetDataManager( const aDataManager : IsiDataManager1);
 begin
-  if IsValidAs<IsiDataManager1>( aDataManager ) then
-    fsiDataManager.siAsCell := aDataManager
+  if TryCellAs<IsiDataManager1>( aDataManager ) then
+    fDataManagerRef.siAsCell := aDataManager
   else
-    Assert(False,'Invalid Data manager setting in siSetDataManager of DiscoveryManager');
+    raise Exception.Create( 'Invalid Data manager setting in siSetDataManager of DiscoveryManager' );
 end;
 
 procedure TcoDiscoveryManager.siSaveSystem( const aName : string = '');
@@ -284,20 +294,24 @@ begin
   siRestore;
 end;
 
-procedure TcoDiscoveryManager.OnSiSaveSystem( const aSender : IsiCellObject);
-begin
-  siSaveSystem( aSender.siGetSubCell('aName').siAsString );
-end;
-
-procedure TcoDiscoveryManager.OnSiRestoreSystem( const aSender : IsiCellObject);
-begin
-  siRestoreSystem( aSender.siGetSubCell('aName').siAsString );
-end;
-
 function TcoDiscoveryManager.siRTTI : TRttiContext;
 begin
   Result := fRTTIContext;
 end;
+
+procedure TcoDiscoveryManager.OnSaveSystem( const aSender : IsiCellObject);
+begin
+  siSaveSystem( ValidCell( aSender.siGetSubCell('aName')).siAsString );
+end;
+
+procedure TcoDiscoveryManager.OnRestoreSystem( const aSender : IsiCellObject);
+begin
+  siRestoreSystem( ValidCell( aSender.siGetSubCell('aName')).siAsString );
+end;
+
 {$ENDREGION}
+
+initialization
+  TcoDiscoveryManager.RegisterExplicit;
 
 end.

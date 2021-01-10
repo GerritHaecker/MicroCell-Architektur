@@ -54,7 +54,6 @@ interface
 
 uses
   OurPlant.Common.CellObject,
-  OurPlant.Common.CellAttributes,
   System.Rtti,
   {$IF CompilerVersion >= 28.0}System.Json,{$ENDIF}
   Data.DBXJSON;

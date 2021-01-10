@@ -46,7 +46,6 @@ interface
 uses
   System.Rtti,
   OurPlant.Common.CellObject,
-  OurPlant.Common.CellAttributes,
   {$IF CompilerVersion >= 28.0}System.Json,{$ENDIF}
   Data.DBXJSON;
 {$ENDREGION}
@@ -201,7 +200,7 @@ type
   ///     ranges and default in Release V1.
   ///   </para>
   /// </summary>
-  [RegisterCellType('boolean','{9FF8DA22-9C7E-46DB-B782-1D04FC5BFD26}')]
+  [RegisterCellType('Boolean','{9FF8DA22-9C7E-46DB-B782-1D04FC5BFD26}')]
   TcoBoolean = class(TCellObject, IsiBoolean)
   strict protected
     /// <summary>
@@ -250,7 +249,7 @@ type
   ///     ranges and default in Release V1.
   ///   </para>
   /// </summary>
-  [RegisterCellType('integer','{5F30064A-2628-40EF-BFC2-F220A4754D49}')]
+  [RegisterCellType('Integer','{5F30064A-2628-40EF-BFC2-F220A4754D49}')]
   TcoInteger = class(TCellObject, IsiInteger)
   strict protected
     // Content as String read / write
@@ -302,7 +301,7 @@ type
   ///     Implementation of Data skill interface for an float value.
   ///   </para>
   /// </summary>
-  [RegisterCellType('float','{72F21CFC-6B34-4ACE-B0DB-4AB388FEC627}')]
+  [RegisterCellType('Float','{72F21CFC-6B34-4ACE-B0DB-4AB388FEC627}')]
   TcoFloat = class(TCellObject, IsiFloat)
   strict protected
     // Content as String read / write
@@ -354,7 +353,7 @@ type
   ///     Implementation of Data skill interface for an string
   ///   </para>
   /// </summary>
-  [RegisterCellType('string','{21EEC5E5-9A52-497A-82AA-0C81314E6B44}')]
+  [RegisterCellType('String','{21EEC5E5-9A52-497A-82AA-0C81314E6B44}')]
   TcoString = class(TCellObject, IsiString)
   strict protected
     // Content as String read / write
@@ -386,7 +385,7 @@ type
   /// <summary>
   ///   Date/Time data cell object to string skill interface IsiDateTime
   /// </summary>
-  [RegisterCellType('date and time','{482AD7BE-2306-483C-9EE9-DECDF4C37CB3}')]
+  [RegisterCellType('Date and time','{482AD7BE-2306-483C-9EE9-DECDF4C37CB3}')]
   TcoDateTime = class(TcoString, IsiDateTime)
   strict protected
     // override implementation of IsiCellObject
@@ -421,7 +420,7 @@ type
   /// <summary>
   ///   Date data cell object to string skill interface IsiDateTime
   /// </summary>
-  [RegisterCellType('time','{40A98A48-A265-47A9-B6CB-53D6CE334B50}')]
+  [RegisterCellType('Time','{40A98A48-A265-47A9-B6CB-53D6CE334B50}')]
   TcoTime = class(TcoDateTime)
   strict protected
     // override implementation of IsiCellObject
@@ -442,7 +441,7 @@ type
   /// <summary>
   ///   Date data cell object to string skill interface IsiDateTime
   /// </summary>
-  [RegisterCellType('date','{DBD48A80-53C1-498C-930F-6640D72884C4}')]
+  [RegisterCellType('Date','{DBD48A80-53C1-498C-930F-6640D72884C4}')]
   TcoDate = class(TcoDateTime)
   strict protected
     // override implementation of IsiCellObject
@@ -468,7 +467,7 @@ type
   ///     Implementation of Data skill interface for an cell object class
   ///   </para>
   /// </summary>
-  [RegisterCellType('class', '{E9EC283A-7BCA-432C-9ABA-B0E85046D4B0}' )]
+  [RegisterCellType('Cell class', '{E9EC283A-7BCA-432C-9ABA-B0E85046D4B0}' )]
   TcoCellClass = class(TcoString, IsiCellClass)
   strict protected
     /// <summary>
@@ -499,7 +498,7 @@ type
   /// <summary>
   ///   IsiCellObject reference cell object
   /// </summary>
-  [RegisterCellType('reference', '{7E64D16F-7942-4FB2-BA39-BFA2B59CD68D}' )]
+  [RegisterCellType('Cell reference', '{7E64D16F-7942-4FB2-BA39-BFA2B59CD68D}' )]
   TcoCellReference = class(TcoString, IsiCellReference)
   public
     /// <summary>
@@ -622,9 +621,6 @@ end;
 {$ENDREGION}
 
 {$REGION 'TcoFloat implementation'}
-const
-  C_FLOAT_STR_FORMAT = '#0.000';
-
 function TcoFloat.siGetAsString : string;
 begin
   Result := FormatFloat(C_FLOAT_STR_FORMAT,siAsFloat);
@@ -787,9 +783,11 @@ end;
 
 {$REGION 'TcoCellReference implementation'}
 function  TcoCellReference.siGetAsString : string;
+var
+  vCell : IsiCellObject;
 begin
-  if siValue.IsType<IsiCellObject> then
-    Result := siAsCell.siLongName
+  if siValue.TryAsType<IsiCellObject>(vCell) and Assigned(vCell) then
+    Result := vCell.siLongName
   else if siValue.IsType<string> then
     Result := siValue.AsType<string>
   else
@@ -824,5 +822,14 @@ end;
 
 {$ENDREGION}
 
-
+initialization
+  TcoBoolean.RegisterExplicit;
+  TcoInteger.RegisterExplicit;
+  TcoFloat.RegisterExplicit;
+  TcoString.RegisterExplicit;
+  TcoDateTime.RegisterExplicit;
+  TcoTime.RegisterExplicit;
+  TcoDate.RegisterExplicit;
+  TcoCellClass.RegisterExplicit;
+  TcoCellReference.RegisterExplicit;
 end.

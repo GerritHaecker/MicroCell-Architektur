@@ -56,64 +56,8 @@ uses
 {$ENDREGION}
 
 type
-  TCustomAttributeClass = class of TCustomAttribute;
+  //TCustomAttributeClass = class of TCustomAttribute;
 
-  {$REGION 'Common Cell Type Attribute'}
-{-------------------------------------------------------------------------------
-  Each Cell Object class must be registered as a cell type in the Discovery
-  Manager registry. The registry is used to restore the installed cell after
-  reboot. The RegisterCellTypeAttribute is also kept in the cell for storage of
-  type-specific information.
-
-REMARKS:
-  Each cell type is given a type name and a GUID type. Both information must be
-  unique. With CTRL + SHIFT + G to create a new GUID. This short key creates a
-  GUID (usually for interfaces). Here, the square brackets must be removed afterwards.
--------------------------------------------------------------------------------}
-  /// <summary>
-  ///   Each Cell Object class must be registered as a cell type in the
-  ///   Discovery Manager registry. The registry is used to restore the
-  ///   installed cell after reboot. The RegisterCellTypeAttribute is also kept
-  ///   in the cell for storage of type-specific information.
-  /// </summary>
-  /// <remarks>
-  ///   Each cell type is given a type name and a GUID type. Both information
-  ///   must be unique. With CTRL + SHIFT + G to create a new GUID. This short
-  ///   key creates a GUID (usually for interfaces). Here, the square brackets
-  ///   must be removed afterwards.
-  /// </remarks>
-  /// <example>
-  ///   <para>
-  ///     [RegisterCellType('Integer','{5F30064A-2628-40EF-BFC2-F220A4754D49}')]
-  ///     <br />TcoInteger = <b>class</b>(TCellObject, IsiInteger)
-  ///   </para>
-  ///   <para>
-  ///     <b>end; <br /></b>
-  ///   </para>
-  /// </example>
-  RegisterCellTypeAttribute = class(TCustomAttribute)
-  public
-    /// <summary>
-    ///   The type GUID of cell
-    /// </summary>
-    TypeGuid : TGUID;
-    /// <summary>
-    ///   The cell type name.
-    /// </summary>
-    TypeName : string;
-
-    /// <summary>
-    ///   Create the RegisterCellAttribute with cell type name and cell type
-    ///   GUID.
-    /// </summary>
-    /// <param name="aName">
-    ///   the unique cell type name
-    /// </param>
-    /// <param name="aGuidString">
-    ///   the GUID of cell type
-    /// </param>
-    constructor Create(const aName: string; const aGuidString:string); overload;
-  end;
 
   {$REGION 'Language Manager Attributes'}
   {
@@ -132,15 +76,6 @@ REMARKS:
   {$ENDREGION}
 
 implementation
-
-{$REGION 'Common Cell Type Attribute'}
-constructor RegisterCellTypeAttribute.Create( const aName: string; const aGuidString: string);
-begin
-  TypeName:=aName;
-  TypeGuid:=StringToGuid(aGuidString);
-end;
-
-{$ENDREGION}
 
 {$REGION 'Language Manager Attributes'}
 constructor LingueeAttribute.create(const aText : string);

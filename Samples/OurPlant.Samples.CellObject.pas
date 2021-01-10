@@ -13,7 +13,6 @@ interface
 uses
 
   OurPlant.Common.CellObject,
-  OurPlant.Common.CellAttributes,
   OurPlant.Common.DataCell,
   OurPlant.Samples.SkillInterface;
 
@@ -36,7 +35,12 @@ type
   end;
 
   // Declaration of the cell object to the skill interface sample IsiTestValueGetter
-  [RegisterCellType(C_TEST_CHILD_NAME,C_TEST_CHILD_Type)]   // Register the sample cell object class in DM
+  [RegisterCellType( C_TEST_CHILD_NAME, C_TEST_CHILD_Type)]   // Register the sample cell object class in DM
+
+  [NewCell( TcoString, 'TestString', 'default text for TestString' )]
+  [NewCell( TcoString, 'TestString/SubString', 'text additional sub string')]
+  [NewCell( TcoString, 'TestString/SubString/SubSubString', 'text additional sub sub string')]
+
   TCellObjectTestChild = class(TCellObject, IsiTestValueGetter)
   public // commons of TCellObjectTestChild
     /// <summary>
@@ -50,7 +54,9 @@ type
   strict protected
     // sample for internal working field, setted to a default value
     fIntegerField : Integer;
+
     // sample for an public data cell (Integer)
+    [NewCell( TcoInteger, 'IntegerCell', C_TEST_CHILD_INTEGER)]
     fIntegerCell : IsiInteger;
 
   public
@@ -113,8 +119,8 @@ begin
   ConstructCell('TestDate', 'TestString/SubString');
 
   // construct a sample for an public data cell (Integer)
-  fIntegerCell := ConstructNewCellAs<IsiInteger>(TcoInteger,'IntegerCell');
-  fIntegerCell.siAsInteger := C_TEST_CHILD_INTEGER; // set the default to C_TEST_CHILD_INTEGER
+  //fIntegerCell := ConstructNewCellAs<IsiInteger>(TcoInteger,'IntegerCell');
+  //fIntegerCell.siAsInteger := C_TEST_CHILD_INTEGER; // set the default to C_TEST_CHILD_INTEGER
 
 end;
 

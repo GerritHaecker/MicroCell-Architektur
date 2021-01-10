@@ -13,7 +13,6 @@ interface
 {$REGION 'uses'}
 uses
   OurPlant.Common.CellObject,
-  OurPlant.Common.CellAttributes,
   OurPlant.Common.DataCell;
 {$ENDREGION}
 
@@ -22,171 +21,281 @@ const
   C_SECOND_SKILL_SAMPLE_SIZE = 8;
 
 type
-
 {$REGION 'First Skill interface sample'}
-// First SKILL Interface Sample ++++++++++++++++++++++++++++++++++++++++++++++++
-// hat eine property siMyFirstInteger mit Getter und Setter
-  IsiMyFirstSkillSampleV1 = interface(IsiCellObject)
+  /// <summary>
+  ///  First SKILL Interface Sample
+  ///  hat eine property siMyFirstInteger mit Getter und Setter
+  /// </summary>
+  IsiFirstSkill1 = interface(IsiCellObject)
     ['{E8458E19-7C19-4584-B006-0FA02BA021AC}']
-    function  siGetMyInteger : Integer;                    // Hilfs-Getter für siMyInteger
-    procedure siSetMyInteger(const aInteger : Integer);    // Hilfs-Setter für siMyInteger
-    property  siMyInteger : Integer read siGetMyInteger write siSetMyInteger;
+    /// <summary>
+    ///   Get the integer of first skill interface
+    /// </summary>
+    function  siGetInteger : Integer;
+    /// <summary>
+    ///   Set the integer of first skill interface
+    /// </summary>
+    procedure siSetInteger(const aInteger : Integer);
+    /// <summary>
+    ///   read / write the integer from first skill interface
+    /// </summary>
+    property siInteger : Integer read siGetInteger write siSetInteger;
   end;
 
-// First SKILL Interface Connector Cell for IsiMyFirstSkillSampleV1 ++++++++++++
-// hat eine Subzelle als Methode mit dem Namen siMyFirstInteger. Sie kann über
-// die Interface Funktion siMyFirstInteger (auch get/set) aufgerufen werden
-// oder über die Subzellenstruktur .../siMyFirstSkillSample/siMyFirstInteger
-  [RegisterCellType('MyFirstSkillSample1','{F66D575B-457F-43A9-A3BA-C16B58C75569}')]
-  TsiMyFirstSkillSampleV1 = class(TSkillInterfaceCell, IsiMyFirstSkillSampleV1)
-  strict protected
-    fsiMyInteger : IsiInteger;
+  /// <summary>
+  ///  TsiMyFirstSkill1 ist die universelle skill interface adapter cell von IsiMyFirstSkill1
+  ///  hat eine Subzelle als Methode mit dem Namen siInteger. Sie kann über
+  ///  die Interface Funktion siMyFirstInteger (auch get/set) aufgerufen werden
+  ///  oder über die Subzellenstruktur .../siMyFirstSkillSample/siMyFirstInteger
+  /// </summary>
+  [RegisterCellType('First skill sample','{F66D575B-457F-43A9-A3BA-C16B58C75569}')]
+  TsiFirstSkill1 = class(TCellObject, IsiFirstSkill1)
   public
-    // allgemeiner Teil - Konstruktion der Skill-Interface-Zelle
+    /// <summary>
+    ///   Construct the cell structure during after construction. This method
+    ///   override the virtual method of TCellObject.
+    /// </summary>
     procedure CellConstruction; override;
-    // individueller Teil - Implementierung der Skill-Interface-Methoden
-    function siGetMyInteger : Integer;
-    procedure siSetMyInteger(const aInteger : Integer);
+
+  strict protected
+    /// <summary>
+    ///   Contain the siInteger skill method cell. Construct a independent (no
+    ///   content as sub cell) new cell from TcoInteger with name 'siInteger'
+    /// </summary>
+    [IndependentCell( TcoInteger, 'siInteger')]
+    fsiInteger : IsiInteger;
+
+    /// <summary>
+    ///   Get the integer of first skill. This implementation get the value
+    ///   from the siInteger skill method cell as universal adapter
+    /// </summary>
+    function siGetInteger : Integer;
+    /// <summary>
+    ///   Set the integer of first skill. This implementation use the siInteger
+    ///   skill method cell as universal adapter
+    /// </summary>
+    procedure siSetInteger(const aInteger : Integer);
   end;
 
-// First Cell Object that use SKILL Interface Sample and the Connector Cell ++++
-// Implementieren eines Skill Interfaces als SubZelle. Die Zelle selbst unterstützt
-// das Skill-Interface und auch die Subzelle /siMyFirstSkillSample.
-  [RegisterCellType('MyFirstSkillSampleUseCase','{1213430C-757F-4461-B221-8055D458086F}')]
-  TcoMyFirstSkillSampleUseCase = class(TSkillInterfaceCell, IsiMyFirstSkillSampleV1)
+  /// <summary>
+  ///  TcoFirstSkill1 ist die allgemeine Vorlage für eine cell die IsiMyFirstSkill1
+  ///  implementiert. Sie wird von TsiMyFirstSkill1 abgeleitet und erbt damit die
+  ///  Subzellen Struktur des Adapters.
+  ///  TcoFirstSkill1 ist für die direkte Umsetzung von SI Logik vorgesehen, durch die
+  ///  Event Routinen OnGetInteger und OnSetInteger werden die Aufrufe über die skill
+  ///  method cell's direkt auf die Interface Methoden ungeleitet.
+  ///  in Nachfolgern müssen die Interface Methoden siGetInteger, siSetInteger
+  ///  überschrieben werden.
+  /// </summary>
+  TcoFirstSkill1 = class(TsiFirstSkill1, IsiFirstSkill1)
+  public
+    /// <summary>
+    ///   Construct the cell structure during after construction. This method
+    ///   override the virtual method of TCellObject.
+    /// </summary>
+    procedure CellConstruction; override;
+
+  strict protected
+    /// <summary>
+    ///   abstract pre defined getter for siGetInteger to later override of use
+    ///   cases of this template
+    /// </summary>
+    function siGetInteger : Integer; virtual; abstract;
+    // Implementierung der Skill-Interface-Methoden
+    /// <summary>
+    ///   abstract pre defined setter for siSetInteger to later override of use
+    ///   cases of this template
+    /// </summary>
+    procedure siSetInteger(const aInteger : Integer); virtual; abstract;
+
+  strict private
+    /// <summary>
+    ///   The OnRead Event of the skill method cell of siInteger
+    /// </summary>
+    procedure OnGetInteger(const aSender : IsiCellObject);
+    /// <summary>
+    ///   The OnWrite Event of the skill method cell of siInteger
+    /// </summary>
+    procedure OnSetInteger(const aSender : IsiCellObject);
+  end;
+{$ENDREGION}
+
+{$REGION 'Second Skill interface sample'}
+  IsiSecondSkill1 = interface(IsiCellObject)
+    ['{19D0FCD1-24D3-40E5-BEF4-1B42B1F5314B}']
+    function  siSize: Byte;
+    function  siBit(const aIndex : Byte) : Boolean;
+    function  siGetInteger : Integer;
+    procedure siSetInteger(const aValue : Integer);
+    property  siInteger : Integer read siGetInteger write siSetInteger;
+    procedure siInc;
+  end;
+
+  // TsiSecondSkill1 is the universal skill interface adapter cell of IsiSecondSkill1
+  [RegisterCellType('Second skill sample','{82195BA7-E3B3-4856-A6A8-D2F29BEEFE68}')]
+  TsiSecondSkill1 = class(TCellObject, IsiSecondSkill1)
+  public
+    /// <summary>
+    ///   Construct the cell structure during after construction. This method
+    ///   override the virtual method of TCellObject.
+    /// </summary>
+    procedure CellConstruction; override;
+
+  strict protected
+    [IndependentCell( TcoInteger, 'siSize', C_SECOND_SKILL_SAMPLE_SIZE)]
+    fsiSize : IsiInteger;
+
+    [IndependentCell( TcoBoolean, 'siBit', false)]
+    fsiBit : IsiBoolean;
+
+    [IndependentCell( TcoInteger, 'siBit/aIndex', 0)]
+    fsiBitAIndex : IsiInteger;
+
+    [IndependentCell( TcoInteger, 'siInteger', C_FIRST_SKILL_SAMPLE_INTEGER)]
+    fsiInteger : IsiInteger;
+
+    [IndependentCell( TCellObject, 'siInc')]
+    fsiInc : IsiCellObject;
+
+    // Implementierung der Skill-Interface-Methoden
+    function  siSize: Byte;
+    function  siBit(const aIndex : Byte) : Boolean;
+    function  siGetInteger : Integer;
+    procedure siSetInteger(const aValue : Integer);
+    property  siInteger : Integer read siGetInteger write siSetInteger;
+    procedure siInc;
+  end;
+
+  // TcoSecondSkill1 is the template cell object of skill interface IsiSecondSkill1
+  TcoSecondSkill1 = class(TsiSecondSkill1, IsiSecondSkill1)
+  public
+    /// <summary>
+    ///   Construct the cell structure during after construction. This method
+    ///   override the virtual method of TCellObject.
+    /// </summary>
+    procedure CellConstruction; override;
+
+  strict protected
+    // Implementierung der Skill-Interface-Methoden
+    function  siSize: Byte; virtual; abstract;
+    function  siBit(const aIndex : Byte) : Boolean; virtual; abstract;
+    function  siGetInteger : Integer; virtual; abstract;
+    procedure siSetInteger(const aValue : Integer); virtual; abstract;
+    procedure siInc; virtual; abstract;
+
+  strict private
+    // on Read/write Events der skill method cell
+    procedure OnGetSize(const aSender : IsiCellObject);
+    procedure OnGetBit(const aSender : IsiCellObject);
+    procedure OnGetInteger(const aSender : IsiCellObject);
+    procedure OnSetInteger(const aSender : IsiCellObject);
+    procedure OnGetInc(const aSender : IsiCellObject);
+  end;
+{$ENDREGION}
+
+{$REGION 'Use Cases Sample 1: derived IsiMyFirstSkill1 cell object'}
+  /// <summary>
+  ///  TcoSkilledCellSample1 erbt die Fähigkeiten der Zellen TcoFirstSkill1 und TsiMyFirstSkill1
+  ///  implementiert somit IsiMyFirstSkill1 und stellt auch die skill interface cell
+  ///  Struktur zur Verfügung, Hier muss jetzt den Interface Methoden Code gegeben werden.
+  /// </summary>
+  [RegisterCellType('skilled cell sample 1','{1213430C-757F-4461-B221-8055D458086F}')]
+  TcoSkilledCellSample1 = class(TcoFirstSkill1, IsiFirstSkill1)
+  public
+    /// <summary>
+    ///   Construct the cell structure during after construction. This method
+    ///   override the virtual method of TCellObject.
+    /// </summary>
+    procedure CellConstruction; override;
   strict protected
     fInteger : Integer;
-    fsiFirstSkill : IsiMyFirstSkillSampleV1;
-    procedure OnGetMyInteger(const aSender : IsiCellObject);
-    procedure OnSetMyInteger(const aSender : IsiCellObject);
-  public
-    procedure CellConstruction; override;
-    // durch die Implementierung wird das Skill Interface der Subzelle zum eigenem Interface
-    property FirstSkill : IsiMyFirstSkillSampleV1 read fsiFirstSkill implements IsiMyFirstSkillSampleV1;
+    // Implementierung der Skill-Interface-Methoden
+    function siGetInteger : Integer; override;
+    procedure siSetInteger(const aInteger : Integer); override;
   end;
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 {$ENDREGION}
 
-{$REGION 'Second Skill interface sample'}
-  IsiSecondSkillSampleV1 = interface(IsiCellObject)
-    ['{19D0FCD1-24D3-40E5-BEF4-1B42B1F5314B}']
-    function  siSize: Byte;
-    function  siBit(const aIndex : Byte) : Boolean;
-
-    function  siGetInteger : Integer;
-    procedure siSetInteger(const aValue : Integer);
-    property  siInteger : Integer read siGetInteger write siSetInteger;
-
-    procedure siInc;
-  end;
-{$ENDREGION}
-
-{$REGION 'integrated skill cell sample'}
-  // TsiSecondSkillSampleV1 is a connected skill cell for common usability
-  [RegisterCellType('SecondSkillSampleV1','{82195BA7-E3B3-4856-A6A8-D2F29BEEFE68}')]
-  TsiSecondSkillSampleV1 = class(TSkillInterfaceCell, IsiSecondSkillSampleV1)
-  strict protected
-    fsiSize      : IsiInteger;
-    fsiBit       : IsiBoolean;
-    fsiBitAIndex : IsiInteger;
-    fsiInteger   : IsiInteger;
-    fsiInc       : IsiCellObject;
+{$REGION 'Use Cases Sample 2: cell with two adapted skill interfaces'}
+  [RegisterCellType('skilled cell sample 2','{BF5F5D02-C14A-462C-B702-D8EB03CAC00E}')]
+  TcoSkilledCellSample2 = class(TCellObject, IsiFirstSkill1, IsiSecondSkill1)
   public
-    // allgemeiner Teil - Konstruktion der Skill-Interface-Zelle
+    /// <summary>
+    ///   Construct the cell structure during after construction. This method
+    ///   override the virtual method of TCellObject.
+    /// </summary>
     procedure CellConstruction; override;
 
-    // individueller Teil - Implementierung der Skill-Interface-Methoden
-    function  siSize: Byte;
-    function  siBit(const aIndex : Byte) : Boolean;
-
-    function  siGetInteger : Integer;
-    procedure siSetInteger(const aValue : Integer);
-    property  siInteger : Integer read siGetInteger write siSetInteger;
-
-    procedure siInc;
-  end;
-
-  // Use case of a main cell that use the TsiSecondSkillSampleV1 as connected skill cell
-  [RegisterCellType('ConnectedSkillSample','{BF5F5D02-C14A-462C-B702-D8EB03CAC00E}')]
-  TcoUseConnectedSkillSample = class(TCellObject, IsiMyFirstSkillSampleV1, IsiSecondSkillSampleV1)
   strict protected
-    // protected internal integer
-    fInteger : Integer;
+    [NewCell( TcoInteger, 'Integer', C_FIRST_SKILL_SAMPLE_INTEGER)]
+    fInteger : IsiInteger;
+
+    [NewCell( TcoInteger,'Size', C_SECOND_SKILL_SAMPLE_SIZE)]
+    fSize    : IsiInteger;
 
     // implemented Skill Interfaces
-    fsiFirstSkill : IsiMyFirstSkillSampleV1;
-    fsiSecondSkill : IsiSecondSkillSampleV1;
+    [NewCell( TsiFirstSkill1, 'first skill')]
+    fsiFirstSkill : IsiFirstSkill1;
 
-    // cell procedure for FirstSkill/siMyInteger
-    procedure OnGetMyInteger(const aSender : IsiCellObject);
-    procedure OnSetMyInteger(const aSender : IsiCellObject);
-
-    // cell procedure for SecondSkill/siBit
-    procedure OnGetBit(const aSender : IsiCellObject);
-    // cell procedure for SecondSkill/siInteger (getter and setter)
-    procedure OnGetInteger(const aSender : IsiCellObject);
-    procedure OnsetInteger(const aSender : IsiCellObject);
-    // cell procedure for SecondSkill/siIncrement
-    procedure OnInc(const aSender : IsiCellObject);
-  public
-    // common part of cell construction
-    procedure CellConstruction; override;
+    [NewCell( TsiSecondSkill1, 'second skill')]
+    fsiSecondSkill : IsiSecondSkill1;
 
     // properties of implemented skill interfaces
-    property FirstSkill : IsiMyFirstSkillSampleV1 read fsiFirstSkill implements IsiMyFirstSkillSampleV1;
-    property SecondSkill : IsiSecondSkillSampleV1 read fsiSecondSkill implements IsiSecondSkillSampleV1;
+    property FirstSkill : IsiFirstSkill1 read fsiFirstSkill implements IsiFirstSkill1;
+    property SecondSkill : IsiSecondSkill1 read fsiSecondSkill implements IsiSecondSkill1;
+
+  strict private
+    // on Read/write Events der skill method cell von FirstSkill & SecondSkill
+    procedure OnGetSize(const aSender : IsiCellObject);    // SecondSkill
+    procedure OnGetBit(const aSender : IsiCellObject);     // SecondSkill
+    procedure OnGetInteger(const aSender : IsiCellObject); // FirstSkill & SecondSkill
+    procedure OnSetInteger(const aSender : IsiCellObject); // FirstSkill & SecondSkill
+    procedure OnGetInc(const aSender : IsiCellObject);     // SecondSkill
   end;
 {$ENDREGION}
 
-{$REGION 'Deposed skill cell sample'}
-  // TcoDeposedSkillSample is a disposed skill cell with logic for IsiSecondSkillSampleV1
-  [RegisterCellType('DeposedSkillSample','{C7E27783-746B-4CC4-B3C9-10F6C92CE4D4}')]
-  TcoDeposedSkillSample = class(TSkillInterfaceCell, IsiSecondSkillSampleV1)
-  strict protected
-    fInteger     : Integer; // internal integer;
-
-    fsiSize      : IsiInteger;
-    fsiBit       : IsiBoolean;
-    fsiBitAIndex : IsiInteger;
-    fsiInteger   : IsiInteger;
-    fsiInc       : IsiCellObject;
-
-    // cell procedure for SecondSkill/siBit
-    procedure OnGetBit(const aSender : IsiCellObject);
-    // cell procedure for SecondSkill/siInteger (getter and setter)
-    procedure OnGetInteger(const aSender : IsiCellObject);
-    procedure OnsetInteger(const aSender : IsiCellObject);
-    // cell procedure for SecondSkill/siIncrement
-    procedure OnInc(const aSender : IsiCellObject);
-
+{$REGION 'Use Cases Sample 3: cell with deposed skill interfaces cell'}
+  // TcoDeposedSecondSkill1 is a disposed skill cell with logic for IsiSecondSkill1
+  [RegisterCellType('second skill','{C7E27783-746B-4CC4-B3C9-10F6C92CE4D4}')]
+  TcoDeposedSecondSkill = class(TcoSecondSkill1, IsiSecondSkill1)
   public
-    // allgemeiner Teil - Konstruktion der Skill-Interface-Zelle
+    /// <summary>
+    ///   Construct the cell structure during after construction. This method
+    ///   override the virtual method of TCellObject.
+    /// </summary>
     procedure CellConstruction; override;
 
-    // individueller Teil - Implementierung der Skill-Interface-Methoden
-    function  siSize: Byte;
-    function  siBit(const aIndex : Byte) : Boolean;
+  strict protected
+    [NewCell( TcoInteger, 'Integer', C_FIRST_SKILL_SAMPLE_INTEGER)]
+    fInteger : IsiInteger;
 
-    function  siGetInteger : Integer;
-    procedure siSetInteger(const aValue : Integer);
+    [NewCell( TcoInteger, 'Size', C_SECOND_SKILL_SAMPLE_SIZE)]
+    fSize : IsiInteger;
+
+    // Implementierung der Skill-Interface-Methoden
+    function  siSize: Byte; override;
+    function  siBit(const aIndex : Byte) : Boolean; override;
+    function  siGetInteger : Integer; override;
+    procedure siSetInteger(const aValue : Integer); override;
     property  siInteger : Integer read siGetInteger write siSetInteger;
-
-    procedure siInc;
+    procedure siInc; override;
   end;
-{$ENDREGION}
 
-{$REGION 'User sample for deposed skill cell sample'}
-  // TcoUseDeposedSkillSample as sample for use the disposed skill cell for IsiSecondSkillSampleV1
-  [RegisterCellType('DeposedSkillSample','{C7E27783-746B-4CC4-B3C9-10F6C92CE4D4}')]
-  TcoUseDeposedSkillSample = class(TCellObject, IsiSecondSkillSampleV1)
-  strict protected
-    fsiSecondSkill : IsiSecondSkillSampleV1;
-
+  // TcoSkilledCellSample3 as sample for use the deposed skill cell for IsiSecondSkill1
+  [RegisterCellType('skilled cell sample 3','{C7E27783-746B-4CC4-B3C9-10F6C92CE4D4}')]
+  TcoSkilledCellSample3 = class(TCellObject, IsiSecondSkill1)
   public
-    // allgemeiner Teil - Konstruktion der Skill-Interface-Zelle
+    /// <summary>
+    ///   Construct the cell structure during after construction. This method
+    ///   override the virtual method of TCellObject.
+    /// </summary>
     procedure CellConstruction; override;
 
-    property SecondSkill : IsiSecondSkillSampleV1 read fsiSecondSkill implements IsiSecondSkillSampleV1;
+  strict protected
+    [NewCell( TcoDeposedSecondSkill, 'second skill')]
+    fsiSecondSkill : IsiSecondSkill1;
+
+    property SecondSkill : IsiSecondSkill1 read fsiSecondSkill implements IsiSecondSkill1;
   end;
 {$ENDREGION}
 
@@ -194,7 +303,6 @@ implementation
 
 {$REGION 'uses'}
 uses
-
   System.SysUtils,
   System.RTTI;
 {$ENDREGION}
@@ -206,327 +314,302 @@ const
 {$ENDREGION}
 
 
-{$REGION 'TsiMyFirstSkillSampleV1 implementation'}
-procedure TsiMyFirstSkillSampleV1.CellConstruction;
+{$REGION 'First Skill interface sample implementation'}
+// TsiMyFirstSkill1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+procedure TsiFirstSkill1.CellConstruction;
 begin
   inherited;
-
-  // skill method cell for the getter and setter of siMyInteger of result type integer
-  // property siMyInteger : Integer read siGetMyInteger write siSetMyInteger;
-  fsiMyInteger := ConstructNewCellAs<IsiInteger>(TcoInteger,'siMyInteger');
+  // skill method cell for the getter and setter of siInteger of result type integer
+  //fsiInteger := ConstructNewCellAs<IsiInteger>(TcoInteger,'siInteger');
 end;
 
-function TsiMyFirstSkillSampleV1.siGetMyInteger : Integer;
+function TsiFirstSkill1.siGetInteger : Integer;
 begin
   // the getter get the value (integer) from the skill method siMyInteger
-  Result := fsiMyInteger.siAsInteger;
+  Result := fsiInteger.siAsInteger;
 end;
 
-procedure TsiMyFirstSkillSampleV1.siSetMyInteger(const aInteger : Integer);
+procedure TsiFirstSkill1.siSetInteger(const aInteger : Integer);
 begin
   // the setter set the value (integer) of the skill method siMyInteger
-  fsiMyInteger.siAsInteger := aInteger;
+  fsiInteger.siAsInteger := aInteger;
 end;
-{$ENDREGION}
 
-{$REGION 'TcoMyFirstSkillSampleUseCase implementation'}
-procedure TcoMyFirstSkillSampleUseCase.CellConstruction;
+// TcoMyFirstSkill1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+procedure TcoFirstSkill1.CellConstruction;
 begin
   inherited;
-  fInteger := C_FIRST_SKILL_SAMPLE_INTEGER;
-
-  // construct a new skill interface and implemented in the cell of siFirstSkill
-  fsiFirstSkill := ConstructNewCellAs<IsiMyFirstSkillSampleV1>(TsiMyFirstSkillSampleV1,'FirstSkill');
-
-  // setzte Execute Porcedure für die Skill Interface Methode siMyFirstInteger
-  fsiFirstSkill.siGetSubCell('siMyInteger').siOnRead := OnGetMyInteger;
-  fsiFirstSkill.siGetSubCell('siMyInteger').siOnWrite := OnSetMyInteger;
+  // setzte Event Procedure für die Skill Interface Methode siInteger
+  fsiInteger.siOnRead := OnGetInteger;
+  fsiInteger.siOnWrite := OnSetInteger;
 end;
 
-procedure TcoMyFirstSkillSampleUseCase.OnGetMyInteger(const aSender : IsiCellObject);
-var
-  vMyInteger : IsiInteger;
+procedure TcoFirstSkill1.OnGetInteger(const aSender : IsiCellObject);
 begin
-  Assert( isValidAs<IsiInteger>( aSender, vMyInteger),
-   'Invalid sender of OnGetMyInteger' );
+  // der Aufruf der Interface Methode über die skill method cell siInteger (Sender)
+  CellAs<IsiInteger>(aSender).siAsInteger := siGetInteger;
 
-  // the call of OnRead write the siMyInteger value (sender as IsiInteger) with internal integer
-  vMyInteger.siAsInteger := fInteger;
+  // ODER: fsiInteger.siAsInteger := siGetInteger;
 end;
 
-procedure TcoMyFirstSkillSampleUseCase.OnSetMyInteger(const aSender : IsiCellObject);
-var
-  vMyInteger : IsiInteger;
+procedure TcoFirstSkill1.OnSetInteger(const aSender : IsiCellObject);
 begin
-  Assert( isValidAs<IsiInteger>( aSender, vMyInteger),
-   'Invalid sSender or no IsiInteger in OnSetMyInteger' );
+  // der Aufruf der Interface Methode über die skill method cell siInteger (Sender)
+  siSetInteger( CellAs<IsiInteger>( aSender).siAsInteger );
 
-  // the call of OnWrite write the internal integer with siMyInteger value (Sender as IsiInteger)
-  fInteger := vMyInteger.siAsInteger
+  // ODER: siSetInteger( fsiInteger.siAsInteger );
 end;
 
 {$ENDREGION}
 
-{$REGION 'TsiSecondSkillSampleV1 implementation'}
-procedure TsiSecondSkillSampleV1.CellConstruction;
+{$REGION 'Second Skill interface sample implementation'}
+// TsiSecondSkill1 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+procedure TsiSecondSkill1.CellConstruction;
 begin
   inherited;
   // construct the skill method: function siSize: Byte
-  fsiSize := ConstructNewCellAs<IsiInteger>(TcoInteger,'siSize');
+  //fsiSize := ConstructNewCellAs<IsiInteger>(TcoInteger,'siSize');
 
   // construct the skill method: function siBit(const aBit : Byte) : Boolean
-  fsiBit := ConstructNewCellAs<IsiBoolean>(TcoBoolean,'siBit');
-  fsiBitAIndex := ConstructNewCellAs<IsiInteger>(TcoInteger,'siBit/aIndex');
+  //fsiBit := ConstructNewCellAs<IsiBoolean>(TcoBoolean,'siBit');
+  //fsiBitAIndex := ConstructNewCellAs<IsiInteger>(TcoInteger,'siBit/aIndex');
 
   // construct the skill method: property  siInteger : Integer (read/write)
-  fsiInteger := ConstructNewCellAs<IsiInteger>(TcoInteger,'siInteger');
+  //fsiInteger := ConstructNewCellAs<IsiInteger>(TcoInteger,'siInteger');
 
   // construct the skill method: procedure siInc
-  fsiInc := ConstructNewCell('siInc');
-
+  //fsiInc := ConstructNewCell('siInc');
 end;
 
-function TsiSecondSkillSampleV1.siSize: Byte;
+function TsiSecondSkill1.siSize: Byte;
 begin
   Result := fsiSize.siAsInteger;
 end;
 
-function TsiSecondSkillSampleV1.siBit(const aIndex : Byte) : Boolean;
+function TsiSecondSkill1.siBit(const aIndex : Byte) : Boolean;
 begin
   fsiBitAIndex.siAsInteger := aIndex;
   Result := fsiBit.siAsBoolean;
 end;
 
-function TsiSecondSkillSampleV1.siGetInteger : Integer;
+function TsiSecondSkill1.siGetInteger : Integer;
 begin
   Result := fsiInteger.siAsInteger;
 end;
 
-procedure TsiSecondSkillSampleV1.siSetInteger(const aValue : Integer);
+procedure TsiSecondSkill1.siSetInteger(const aValue : Integer);
 begin
   fsiInteger.siAsInteger := aValue;
 end;
 
-procedure TsiSecondSkillSampleV1.siInc;
+procedure TsiSecondSkill1.siInc;
 begin
   fsiInc.siCall;
 end;
 
+// TcoSecondSkill1 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+procedure TcoSecondSkill1.CellConstruction;
+begin
+  inherited;
+  fsiSize.siOnRead := OnGetSize;
+  fsiBit.siOnRead := OnGetBit;
+  fsiInteger.siOnRead := OnGetInteger;
+  fsiInteger.siOnWrite := OnSetInteger;
+  fsiInc.siOnRead := OnGetInc;
+end;
+
+// on Read/write Events der siInteger skill method cell
+procedure TcoSecondSkill1.OnGetSize(const aSender : IsiCellObject);
+begin
+  // der Aufruf der Interface Methode über die skill method cell siSize (Sender)
+  CellAs<IsiInteger>(aSender).siAsInteger := siSize;
+end;
+
+procedure TcoSecondSkill1.OnGetBit(const aSender : IsiCellObject);
+begin
+  // der Aufruf der Interface Methode über die skill method cell siBit(aIndex) (Sender)
+  CellAs<IsiBoolean>(aSender).siAsBoolean := siBit( fsiBitAIndex.siAsInteger );
+end;
+
+procedure TcoSecondSkill1.OnGetInteger(const aSender : IsiCellObject);
+begin
+  // der Aufruf der Interface Methode über die skill method cell siGetInteger (Sender)
+  CellAs<IsiInteger>(aSender).siAsInteger := siGetInteger;
+end;
+
+procedure TcoSecondSkill1.OnSetInteger(const aSender : IsiCellObject);
+begin
+  // der Aufruf der Interface Methode über die skill method cell siSetInteger (Sender)
+  siSetInteger( CellAs<IsiInteger>(aSender).siAsInteger );
+end;
+
+procedure TcoSecondSkill1.OnGetInc(const aSender : IsiCellObject);
+begin
+  // der Aufruf der Interface Methode über die skill method cell siInc (Sender)
+  siInc;
+end;
 {$ENDREGION}
 
-{$REGION 'TcoUseConnectedSkillSample implementation'}
-procedure TcoUseConnectedSkillSample.CellConstruction;
+{$REGION 'TcoSkilledCellSample1 - Use cases sample 1 implementation'}
+// TcoSkilledCellSample1 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+procedure TcoSkilledCellSample1.CellConstruction;
+const MY_DEFAULT_INT = 0;
+begin
+  inherited;
+  fInteger := MY_DEFAULT_INT;
+end;
+
+function TcoSkilledCellSample1.siGetInteger : Integer;
+begin
+  Result := fInteger;
+end;
+
+procedure TcoSkilledCellSample1.siSetInteger(const aInteger : Integer);
+begin
+  fInteger := aInteger;
+end;
+
+
+{$ENDREGION}
+
+{$REGION 'TcoSkilledCellSample2 - Use Cases Sample 2 implementation'}
+procedure TcoSkilledCellSample2.CellConstruction;
 var vIntCell : IsiInteger;
     vCell : IsiCellObject;
 begin
   inherited;
-  // set the default values
-  fInteger := C_FIRST_SKILL_SAMPLE_INTEGER;
 
-  // construct the first skill interface FirstSkill
-  fsiFirstSkill := ConstructNewCellAs<IsiMyFirstSkillSampleV1>(TsiMyFirstSkillSampleV1,'FirstSkill');
+  // construct data cells for own vars and set the default values
+  //fInteger := ConstructNewCellAs<IsiInteger>(TcoInteger,'Integer');
+ // fInteger.siAsInteger:=C_FIRST_SKILL_SAMPLE_INTEGER;
 
-  // beispielhaft verwendet siMyInteger eine interne Integer Variable,
-  // fMyIntegerProc wird aufgerufen, um den Inhalt zwischen der Zelle und der Variable
-  // zu synchronisieren
-  Assert( siFindCell( 'FirstSkill/siMyInteger', @vCell),
-    'Invalid construction of method cell FirstSkill/siMyInteger');
-  vCell.siOnRead := OnGetMyInteger;
-  vCell.siOnWrite := OnSetMyInteger;
+  //fSize := ConstructNewCellAs<IsiInteger>(TcoInteger,'Size');
+  //fSize.siAsInteger:=C_SECOND_SKILL_SAMPLE_SIZE;
 
-  // construct the second skill interface SecondSkill
-  fsiSecondSkill := ConstructNewCellAs<IsiSecondSkillSampleV1>(TsiSecondSkillSampleV1,'SecondSkill');
+  // adapt and implement the first skill over TsiFirstSkill1
+  //fsiFirstSkill := ConstructNewCellAs<IsiFirstSkill1>(TsiFirstSkill1,'first skill');
 
-  // die Methoden Zelle siSize von MySecondSkill ist eine Integerzelle,
-  // Sie übernimmt auch die Funktion als Speicerstelle für die Size,
-  // damit wird keine eigene Zell-Procedure zur Speicherung benötigt
-  // der Default Wert wird der IntegerZelle vorgegeben,
-  //   fsiSecondSkillSample.siSize := C_SECOND_SKILL_SAMPLE_SIZE;
-  // --> Da siSize keine write Rechte hat, muss jedoch die Zelle angesprochen werden
-  Assert( siFindCell('SecondSkill/siSize', IsiInteger, @vIntCell),
-   'SecondSkill/siSize is unvalid IsiInteger');
-  vIntCell.siAsInteger := C_SECOND_SKILL_SAMPLE_SIZE; // set the default of size
+  // set the read/write Events to skill method siInteger of FirstSkill
+  with ValidCell( fsiFirstSkill.siGetSubCell('siInteger')) do
+  begin
+    siOnRead  := OnGetInteger;
+    siOnWrite := OnSetInteger;
+  end;
 
-  // set the cell procedures for the skill methods of SecondSkill
-  SecondSkill.siGetSubCell('siBit').siOnRead := OnGetBit;
-  SecondSkill.siGetSubCell('siInteger').siOnRead := OnGetInteger;
-  SecondSkill.siGetSubCell('siInteger').siOnWrite := OnSetInteger;
-  SecondSkill.siGetSubCell('siInc').siOnRead := OnInc;
+  // adapt and implement the second skill over TsiSecondSkill1
+  //fsiSecondSkill := ConstructNewCellAs<IsiSecondSkill1>(TsiSecondSkill1,'second skill');
+
+  // set the read/write Events to skill methods SecondSkill
+  ValidCell( fsiSecondSkill.siGetSubCell('siSize')).siOnRead := OnGetSize;
+  ValidCell( fsiSecondSkill.siGetSubCell('siBit')).siOnRead := OnGetBit;
+  with ValidCell( fsiSecondSkill.siGetSubCell('siInteger')) do
+  begin
+    siOnRead  := OnGetInteger;
+    siOnWrite := OnSetInteger;
+  end;
+  ValidCell( fsiSecondSkill.siGetSubCell('siInc')).siOnRead := OnGetInc;
 
 end;
 
-procedure TcoUseConnectedSkillSample.OnGetMyInteger(const aSender : IsiCellObject);
+procedure TcoSkilledCellSample2.OnGetSize(const aSender : IsiCellObject);
 begin
-  // Skill interface:     FirstSkill
-  // Skill method:        function siGetMyInteger : integer;
-  // Skill method cell:   FirstSkill/siMyInteger
-
-  // bevor der Getter von siMyInteger ausgelesen wird, wird er mit fInteger beschrieben
-  FirstSkill.siMyInteger := fInteger;
+  CellAs<IsiInteger>( aSender).siAsInteger := fSize.siAsInteger;
 end;
 
-procedure TcoUseConnectedSkillSample.OnSetMyInteger(const aSender : IsiCellObject);
-begin
-  // Skill interface:     FirstSkill
-  // Skill method:        procedure siSetMyInteger (const aInteger : integer);
-  // Skill method cell:   FirstSkill/siMyInteger
-
-  // nachdem der Setter von siMyInteger geschrieben wurde, wird der Wert in fInteger geschrieben
-  fInteger := FirstSkill.siMyInteger;
-end;
-
-procedure TcoUseConnectedSkillSample.OnGetBit(const aSender : IsiCellObject);
+procedure TcoSkilledCellSample2.OnGetBit(const aSender : IsiCellObject);
 var
   vBit : IsiBoolean;
   vIndex : IsiInteger;
 begin
-  // Skill interface:     SecondSkill
-  // Skill method:        function siBit(const aIndex : Byte) : integer;
-  // skill method cell:   SecondSkill/siBit
-
-  // aSender is SecondSkill/siBit as Type IsiBoolean;
-  Assert( IsValidAs<IsiBoolean>( aSender, vBit), 'aSender is not a boolean cell');
-
-  // vBit is now SecondSkill/isBit as IsiBoolean
-
-  // SecondSkill/siBit/aIndex is the Parameter (const aIndex : Byte) of siBit
-  Assert( IsValidAs<IsiInteger>( vBit.siGetSubCell('aIndex'), vIndex),
-    'Invalid SecondSkill/aIndex in OnGetBit');
+  vBit := CellAs<IsiBoolean>( aSender);
+  vIndex := CellAs<IsiInteger>( vBit.siGetSubCell('aIndex'));
 
   // check aIndex is smaller then value of Skill-Method SecondSkill/siSize
-  if vIndex.siAsInteger < SecondSkill.siSize then
+  if vIndex.siAsInteger < fSize.siAsInteger then
     // the Result from SecondSkill/siBit is the masked integer value
-    vBit.siAsBoolean := (fInteger and (1 shl vIndex.siAsInteger)) > 0
+    vBit.siAsBoolean := (fInteger.siAsInteger and (1 shl vIndex.siAsInteger)) > 0
   else
     vBit.siAsBoolean :=False;
-
 end;
 
-procedure TcoUseConnectedSkillSample.OnGetInteger(const aSender : IsiCellObject);
+procedure TcoSkilledCellSample2.OnGetInteger(const aSender : IsiCellObject);
 begin
-  // Skill interface:     SecondSkill
-  // Skill method:        function siInteger : integer;
-  // Skill method cell:   SecondSkill/siInteger
-
-  // siGetInteger of skill interface SecondSkill are called or value of method
-  // cell Second/siInteger is in reading
-
-  Assert( isValid( SecondSkill ), 'Unvalid SecondSkill in OnGetInteger' );
-
-  // set the skill method cell (secondSkill/siInteger) masked by size to internal integer
-  SecondSkill.siInteger := fInteger and ((1 shl SecondSkill.siSize) - 1);
+  if aSender.siController.siIsSame(fsiSecondSkill) then
+    // OnGetInteger wurde von siGetInteger aus dem Second skill aufgerufen
+    CellAs<IsiInteger>( aSender).siAsInteger :=
+      fInteger.siAsInteger and ((1 shl fSize.siAsInteger) - 1)
+  else
+    // OnGetInteger wurde von siGetInteger aus dem First skill aufgerufen
+    CellAs<IsiInteger>( aSender).siAsInteger := fInteger.siAsInteger;
 end;
 
-procedure TcoUseConnectedSkillSample.OnSetInteger(const aSender : IsiCellObject);
+procedure TcoSkilledCellSample2.OnSetInteger(const aSender : IsiCellObject);
 begin
-  // Skill interface:     SecondSkill
-  // Skill method:        procedure siInteger(const aInteger : integer);
-  // Skill method cell:   SecondSkill/siInteger
-
-  // siSetInteger of skill interface SecondSkill are called or value of method
-  // cell Second/siInteger is in writing
-
-  Assert( isValid( SecondSkill ), 'Unvalid SecondSkill in OnSetInteger' );
-
-  // --> set internal integer masked with siSize
-  fInteger := SecondSkill.siInteger and ((1 shl SecondSkill.siSize) - 1);
+  if aSender.siController.siIsSame(fsiSecondSkill) then
+    // OnSetInteger wurde von siSetInteger aus dem Second skill aufgerufen
+    fInteger.siAsInteger :=
+      CellAs<IsiInteger>( aSender).siAsInteger and ((1 shl fSize.siAsInteger) - 1)
+  else
+    // OnSetInteger wurde von siSetInteger aus dem First skill aufgerufen
+    fInteger.siAsInteger := CellAs<IsiInteger>( aSender).siAsInteger;
 end;
 
 
-procedure TcoUseConnectedSkillSample.OnInc(const aSender : IsiCellObject);
+procedure TcoSkilledCellSample2.OnGetInc(const aSender : IsiCellObject);
 begin
-  // Skill interface:     SecondSkill
-  // Skill method:        procedure siInk;
-  // Skill method cell:   SecondSkill/siInk
-
-  // siInc of skill interface SecondSkill are called or
-  // method cell SecondSkill/siInk siCall are called or value (siGetValue) is in reading
-
-  Inc(fInteger); // increment internal integer
+  fInteger.siAsInteger := fInteger.siAsInteger + 1; // increment internal integer
 end;
 {$ENDREGION}
 
-{$REGION 'TcoDeposedSkillSample implemenation - Deposed interface sample'}
-procedure TcoDeposedSkillSample.CellConstruction;
+{$REGION 'TcoSkilledCellSample3 - Use Cases Sample 3 implementation'}
+procedure TcoDeposedSecondSkill.CellConstruction;
 begin
   inherited;
 
-  // set the default values
-  fInteger := C_FIRST_SKILL_SAMPLE_INTEGER;
+  // construct data cells for own vars and set the default values
+  //fInteger := ConstructNewCellAs<IsiInteger>(TcoInteger,'Integer');
+  //fInteger.siAsInteger:=C_FIRST_SKILL_SAMPLE_INTEGER;
 
-  // construct the skill method structure: function siSize: Byte
-  fsiSize := ConstructNewCellAs<IsiInteger>(TcoInteger,'siSize');
-  fsiSize.siAsInteger := C_SECOND_SKILL_SAMPLE_SIZE; // default value of Size
+  //fSize := ConstructNewCellAs<IsiInteger>(TcoInteger,'Size');
+  //fSize.siAsInteger:=C_SECOND_SKILL_SAMPLE_SIZE;
 
-  // construct the skill method structure: function siBit(const aBit : Byte) : Boolean
-  fsiBit := ConstructNewCellAs<IsiBoolean>(TcoBoolean,'siBit');
-  fsiBitAIndex := ConstructNewCellAs<IsiInteger>(TcoInteger,'siBit/aIndex');
-
-  // construct the skill method structure: property  siInteger : Integer (read/write)
-  fsiInteger := ConstructNewCellAs<IsiInteger>(TcoInteger,'siInteger');
-
-  // construct the skill method structure: procedure siInc
-  fsiInc := ConstructNewCell('siInc');
 end;
 
-function TcoDeposedSkillSample.siSize: Byte;
+function TcoDeposedSecondSkill.siSize: Byte;
 begin
-  Result := fsiSize.siValue.AsType<Byte>;
+  Result := fSize.siValue.AsType<Byte>;
 end;
 
-function TcoDeposedSkillSample.siBit(const aIndex : Byte) : Boolean;
+function TcoDeposedSecondSkill.siBit(const aIndex : Byte) : Boolean;
 begin
   // check aIndex is smaller then value of Skill-Method siSize (cell)
-  if aIndex < fsiSize.siAsInteger then
+  if aIndex < fSize.siAsInteger then
     // the Result from SecondSkill/siBit is the masked integer value
-    result := (fInteger and (1 shl aIndex)) > 0
+    result := (fInteger.siAsInteger and (1 shl aIndex)) > 0
   else
     result :=False;
 end;
 
-function TcoDeposedSkillSample.siGetInteger : Integer;
+function TcoDeposedSecondSkill.siGetInteger : Integer;
 begin
-  Result := fInteger and ((1 shl fsiSize.siAsInteger) - 1);
+  Result := fInteger.siAsInteger and ((1 shl fSize.siAsInteger) - 1);
 end;
 
-procedure TcoDeposedSkillSample.siSetInteger(const aValue : Integer);
+procedure TcoDeposedSecondSkill.siSetInteger(const aValue : Integer);
 begin
-  fInteger := aValue and ((1 shl fsiSize.siAsInteger) - 1);
+  fInteger.siAsInteger := aValue and ((1 shl fSize.siAsInteger) - 1);
 end;
 
-procedure TcoDeposedSkillSample.siInc;
+procedure TcoDeposedSecondSkill.siInc;
 begin
-  inc(fInteger);
+  fInteger.siAsInteger := fInteger.siAsInteger + 1;
 end;
 
-procedure TcoDeposedSkillSample.OnGetBit(const aSender : IsiCellObject);
-begin
-  fsiBit.siAsBoolean := siBit(fsiBitAIndex.siAsInteger);
-end;
-
-procedure TcoDeposedSkillSample.OnGetInteger(const aSender : IsiCellObject);
-begin
-  fsiInteger.siAsInteger := siInteger;
-end;
-
-procedure TcoDeposedSkillSample.OnSetInteger(const aSender : IsiCellObject);
-begin
-  siInteger := fsiInteger.siAsInteger;
-end;
-
-procedure TcoDeposedSkillSample.OnInc(const aSender : IsiCellObject);
-begin
-  siInc;
-end;
-
-{$ENDREGION}
-
-{$REGION 'TcoUseDeposedSkillSample implementation - User sample for deposed skill cell'}
-procedure TcoUseDeposedSkillSample.CellConstruction;
+procedure TcoSkilledCellSample3.CellConstruction;
 begin
   inherited;
   // construct the second skill interface SecondSkill
-  fsiSecondSkill := ConstructNewCellAs<IsiSecondSkillSampleV1>(TcoDeposedSkillSample,'SecondSkill');
+  //fsiSecondSkill := ConstructNewCellAs<IsiSecondSkill1>(TcoDeposedSecondSkill,'second skill');
 end;
 {$ENDREGION}
 

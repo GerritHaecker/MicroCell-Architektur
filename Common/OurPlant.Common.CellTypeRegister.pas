@@ -45,7 +45,6 @@ interface
 {$REGION 'uses'}
 uses
   OurPlant.Common.CellObject,
-  OurPlant.Common.CellAttributes,
   OurPlant.Common.TypesAndConst,
   OurPlant.Common.DataCell,
   System.Rtti,
@@ -106,7 +105,7 @@ type
   ///   cell object for cell type register implement IsiCellTypeRegister. The
   ///   cell type register is a system cell of discovery manager.
   /// </summary>
-  [RegisterCellType('cell type register','{D93364D5-C2AC-4DC4-B4CA-4BA22FDD59B9}')]
+  [RegisterCellType('Cell type register','{D93364D5-C2AC-4DC4-B4CA-4BA22FDD59B9}')]
   TcoCellTypeRegister = class(TCellObject, IsiCellTypeRegister)
 
   public
@@ -204,7 +203,7 @@ type
   ///   The cell object for a cell type register entry is derived fro TcoCell
   ///   class as data cell object to hold a TCellClass as vlaue
   /// </summary>
-  [RegisterCellType('cell type','{0AE4F7B2-F8E2-4F14-942A-99D49AE48592}')]
+  //[RegisterCellType('Cell type entry','{0AE4F7B2-F8E2-4F14-942A-99D49AE48592}')]
   TcoCellTypeRegisterEntry = class(TcoCellClass, IsiRegisterEntry1)
   strict protected
     /// <summary>
@@ -238,7 +237,7 @@ implementation
 {$REGION 'uses'}
 uses
   OurPlant.Common.DiscoveryManager,
-  OurPlant.Common.DataManager,
+  OurPlant.SkillInterface.DataManager,
   System.TypInfo;
 {$ENDREGION}
 
@@ -257,7 +256,7 @@ begin
   inherited;
 
   // this cell ge now content to controller as subcell (own data saving)
-  fSubCellContent := False; // eigene Speicherung, nicht als sub cell content speichern
+  siIndependentCell; // eigene Speicherung, nicht als sub cell content speichern
 
   // fish all registred cell object classes from RTTI context and construct the
   // cell type register as sub list
@@ -297,7 +296,7 @@ begin
 
   for vCount := 0 to High(fSubCells) do
 
-    if isValidAs<IsiRegisterEntry1>( fSubCells[vCount], vEntry) and
+    if TryCellAs<IsiRegisterEntry1>( fSubCells[vCount], vEntry) and
      (vEntry.siGuid = aGuid) then
 
       Exit(fSubCells[vCount]);
@@ -312,7 +311,7 @@ begin
 
   for vCount := 0 to High(fSubCells) do
 
-    if isValidAs<IsiRegisterEntry1>( fSubCells[vCount], vEntry) and
+    if TryCellAs<IsiRegisterEntry1>( fSubCells[vCount], vEntry) and
      (vEntry.siAsClass = aCellClass) then
 
       Exit(fSubCells[vCount]);
@@ -323,7 +322,7 @@ function TcoCellTypeRegister.siAddNewCellType(const aCellClass : TCellClass;
 var
   vEntry: IsiRegisterEntry1;
 begin
-  if isValidAs<IsiRegisterEntry1>( siAddNewSubCell( TcoCellTypeRegisterEntry, aTypeName), vEntry) then
+  if TryCellAs<IsiRegisterEntry1>( siAddNewSubCell( TcoCellTypeRegisterEntry, aTypeName), vEntry) then
   begin
     vEntry.siGuid := aTypeGuid;
     vEntry.siAsClass := aCellClass;
@@ -335,7 +334,7 @@ function TcoCellTypeRegister.siBuildNewCell(const aGuid: TGuid; const aCellName:
 var
   vEntry: IsiRegisterEntry1;
 begin
-  if IsValidAs<IsiRegisterEntry1>( siGetSubCell(aGuid), vEntry) and
+  if TryCellAs<IsiRegisterEntry1>( siGetSubCell(aGuid), vEntry) and
    (vEntry.siAsClass.InheritsFrom(TCellObject)) then
 
     Result:= vEntry.siAsClass.create(aCellName);
@@ -346,7 +345,7 @@ function TcoCellTypeRegister.siBuildNewCell(const aTypeName: string; const aCell
 var
   vEntry: IsiRegisterEntry1;
 begin
-  if IsValidAs<IsiRegisterEntry1>( siGetSubCell(aTypeName), vEntry) and
+  if TryCellAs<IsiRegisterEntry1>( siGetSubCell(aTypeName), vEntry) and
    (vEntry.siAsClass.InheritsFrom(TCellObject)) then
 
     Result:= vEntry.siAsClass.create(aCellName);

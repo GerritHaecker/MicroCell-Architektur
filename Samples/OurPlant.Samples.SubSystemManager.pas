@@ -49,8 +49,7 @@ interface
 
 uses
   OurPlant.Common.CellObject,
-  OurPlant.Common.CellAttributes,
-  OurPlant.Common.DataManager;
+  OurPlant.SkillInterface.DataManager;
 
 const
   C_SUB_SYSTEM_SAMPLE_NAME = 'SubSystemSample';
@@ -109,7 +108,8 @@ type
 implementation
 
 uses
-  OurPlant.Common.DiscoveryManager;
+  OurPlant.Common.DiscoveryManager,
+  OurPlant.Common.DataManager;
 
 procedure TcoSubSystemManagerSample.CellConstruction;
 begin
