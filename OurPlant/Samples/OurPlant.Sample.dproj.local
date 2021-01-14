@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<BorlandProject>
-	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.350,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\SDIAPP.dproj=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Sample.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.288,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\SDIMAIN.PAS=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Samples.SDIMain.PAS</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.288,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\SDIMAIN.dfm=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Samples.SDIMain.dfm</Transaction>
-  </Transactions>
-</BorlandProject>
