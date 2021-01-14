@@ -131,7 +131,7 @@ Bei der Umsetzung von Fähigkeiten (Skills) in Zellen, haben die Entwickler in i
 
 ------
 
-### [zurück](README.md)
+### [zurück -> Hauptdokument](README.md)
 
 ------
 

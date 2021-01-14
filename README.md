@@ -31,7 +31,7 @@ Zur Umsetzung der MicroCell Architektur wird das **TCellObject** als Basisobjekt
 
 Kurz um: **IsiCellObject ist der kleinste Nenner der MicroCell Architektur unter Delphi**. Die Implementierung von IsiCellObject im TCellObject gewährleistet die Implementierung aller darin enthalten Methoden und Eigenschaften in allen Zellobjekten.
 
-Auf Zellobjekte wird ausschließlich über Interface-Referenzierungen zugegriffen. Die Verwaltung der Zellen als Objekt-Instanzen ist nicht zulässig. Die Zellen werden ausschließlich unter den Konventionen der Interface-Technologie verwendet. Jede Zelle kann eine beliebige Anzahl von Skillinterface implementieren.
+Auf Zellobjekte wird ausschließlich über Interface-Referenzierungen zugegriffen. Die Verwaltung der Zellen als Objekt-Instanzen ist nicht zulässig! Die Zellen werden ausschließlich unter den Konventionen der Interface-Technologie verwendet. Jede Zelle kann eine beliebige Anzahl von Skillinterface implementieren bzw. andocken.
 
 ```pascal
 unit OurPlant.Common.CellObject;
@@ -62,7 +62,7 @@ type
   end;
 ```
 
-Die Unit *OurPlant.Common.CellObject.pas* definiert das TCellObject und das Skillinterface IsiCellObject. Einige Details sind der Migration der Architektur in die bestehende OurPlant OS Architektur von 2020 geschuldet. So findet sich unter anderem eine Klasse TOurPlantObject mit dem Interface IsiOurPlantObject. Sie haben nur eine untergeordnete Rolle als Verbindungsschicht zwischen der "alten" Architektur und der neuen MicroCell Architektur.
+Die Unit [OurPlant.Common.CellObject.pas](OurPlant/Common/OurPlant.Common.CellObject.md) definiert das TCellObject und das Skillinterface IsiCellObject. Einige Details sind der Migration der Architektur in die bestehende OurPlant OS Architektur von 2020 geschuldet. So findet sich unter anderem eine Klasse TOurPlantObject mit dem Interface IsiOurPlantObject. Sie haben nur eine untergeordnete Rolle als Verbindungsschicht zwischen der "alten" Architektur und der neuen MicroCell Architektur.
 
 Das Beispiel des Skillinterface **IsiDigitalInput1** und die universellen Adapter- und Vorlagenzellen **TsiDigitalInput1** und **TcoDigitalInput1** aus der Unit *OurPlant.SkillInterface.DigitalInput.pas* zeigt die Ableitung von IsiCellObject. Zu jedem Skillinterface gehören vorgefertigte Zellen, die die Skillinterface in andere Zellen implementieren können (später hierzu mehr). 
 

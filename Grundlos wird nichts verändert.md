@@ -32,7 +32,11 @@ Die bislang erfolgreichen Automatisierungslösungen inklusive ihrer recht statis
 
 Diese MicroCell Architektur ist ein möglicher Baustein. Sie ist dezentral und wandelbar. Unabhängig und unvoreingenommen. Generisch und sehr abstrakt. Sie ist ein Bauanleitung für einen digitalen Organismus, ein System, welches wächst durch Code vieler Entwickler.
 
-### [zurück](README.md)
+------
+
+### [weiter -> Auf dem Weg zur neuen Architektur](Auf dem Weg zur neuen Architektur.md)
+
+### [zurück -> Hauptdokument](README.md)
 
 ------
 
