@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.191,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\SKILLInterface\UI\OurPlant.SKILLInterface.UI.Viewer.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.426,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\SKILLInterface\UI\OurPlant.SKILLInterface.UI.Viewer.pas=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.288,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\SDIMAIN.PAS=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Samples.SDIMain.PAS</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.565,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.CellObject.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.171,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.TypesAndConst.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.796,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.318,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.261,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.273,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.151,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.OurPlantObject.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.697,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Sample1.About.dfm=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\ABOUT.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.290,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Sample1.Main.PAS=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Samples.SDIMain.PAS</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.682,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Sample.CellSample1.pas=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.129,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.LinkPlaceHolder.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.765,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\SKILLInterface\Periphery\OurPlant.SKILLInterface.Periphery.DigitalInput.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.126,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Samples.SkillInterface.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.477,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Sample.dproj=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Sample1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.776,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\SKILLInterface\Periphery\OurPlant.SKILLInterface.Periphery.DigitalInput.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.833,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\Unit1.pas=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\SKILLInterface\OurPlant.SkillInterface.Viewer.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.672,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Sample1.About.PAS=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.697,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Sample1.About.PAS=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\ABOUT.PAS</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.950,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.CellMigration.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.290,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Sample1.Main.dfm=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Samples.SDIMain.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.651,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\SKILLInterface\OurPlant.SkillInterface.DataManager.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.350,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\SDIAPP.dproj=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Sample.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.042,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.CellTypeRegister.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.757,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Samples.CellObject.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.608,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Samples.CellObject.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.106,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.DiscoveryManager.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.002,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.CellSocket.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.089,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.DataManager.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.066,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.DataCell.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.285,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.CellSocket.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.972,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.CellAttributes.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.832,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.CellMigration.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.288,C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\SDIMAIN.dfm=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Samples\OurPlant.Samples.SDIMain.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.924,=C:\Development\VicoBase.V15\branches\2020_03_31_MikroCell_1639\OurPlant\Common\OurPlant.Common.CellAttributes.pas</Transaction>
+  </Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="..\..\OurPlant"/>
+    <File Path="..\Common"/>
+    <File Path="..\Common\OurPlant.Common.CellObject.pas"/>
+    <File Path="..\Common\OurPlant.Common.CellTypeRegister.pas"/>
+    <File Path="..\Common\OurPlant.Common.DataCell.pas"/>
+    <File Path="..\Common\OurPlant.Common.DataManager.pas"/>
+    <File Path="..\Common\OurPlant.Common.DiscoveryManager.pas"/>
+    <File Path="..\Common\OurPlant.Common.LinkPlaceHolder.pas"/>
+    <File Path="..\Common\OurPlant.Common.OurPlantObject.pas"/>
+    <File Path="..\Common\OurPlant.Common.TypesAndConst.pas"/>
+    <File Path="..\SKILLInterface"/>
+    <File Path="..\SKILLInterface\OurPlant.SkillInterface.DataManager.pas"/>
+    <File Path="..\SKILLInterface\OurPlant.SkillInterface.Viewer.pas"/>
+    <File Path="OurPlant.Sample1.Main.PAS"/>
+    <File Path="OurPlant.Sample1.Main.dfm"/>
+    <File Path="OurPlant.Samples.SkillInterface.pas"/>
+    <File Path="OurPlant.Sample.CellSample1.pas"/>
+  </ProjectSortOrder>
+</BorlandProject>

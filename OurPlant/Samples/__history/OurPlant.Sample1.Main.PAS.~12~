@@ -1,0 +1,22 @@
+﻿unit OurPlant.Sample1.Main;
+
+interface
+
+uses Winapi.Windows, System.Classes, Vcl.Forms, Vcl.ComCtrls, Vcl.Menus,
+  Vcl.Controls;
+
+type
+  TSDIAppForm = class(TForm)
+    StatusBar: TStatusBar;
+    MainMenu: TMainMenu;
+  private
+    { Private-Deklarationen }
+  public
+    { Public-Deklarationen }
+  end;
+
+implementation
+
+{$R *.dfm}
+
+end.

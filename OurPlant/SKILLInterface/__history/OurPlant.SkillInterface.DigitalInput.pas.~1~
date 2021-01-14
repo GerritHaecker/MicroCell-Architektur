@@ -1,0 +1,7 @@
+unit OurPlant.SkillInterface.DigitalInput;
+
+interface
+
+implementation
+
+end.
