@@ -184,17 +184,19 @@ Bei der Umsetzung von Fähigkeiten (skills) in Zellen, haben die Entwickler in i
 
 # Die MicroCell Architektur unter Embarcadero Delphi
 
-Die MicroCell Architektur wird erstmals in der [Delphi-Welt von Embarcadero](https://www.embarcadero.com/de/products/delphi) realisiert. Sie macht sich dabei stark die Interface Technologie zu nutze. 
+Die MicroCell Architektur wird erstmals in der [Delphi-Welt von Embarcadero](https://www.embarcadero.com/de/products/delphi) realisiert. Sie macht sich dabei die Interface Technologie zu nutze. 
 
 Für die Verwendung gelten strikte [Architekturkonventionen](Architektur Konventionen.md). Sie sind wichtige Voraussetzung für eine dezentrale entwicklerunabhängige Architektur.
 
-Zur Umsetzung der MicroCell Architektur wird das TCellObject als Basisobjekt bzw. Stammzelle eingeführt. Das TCellObject implementiert das Basis Skillinterface IsiCellObject. Alle Mikrozellen sind von TCellObject oder einer Ableitung abzuleiten. Somit besitzt jede Mikrozelle zukünftig die Fähigkeiten des TCellObject indem sie das Skillinterface IsiCellObject unterstützen. Alle weiteren Skillinterface sind vom IsiCellObject oder einer Ableitung abzuleiten. **IsiDigitalInput1** leiten. Somit wird ebenfalls sichergestellt, dass alle Skillinterface immer auch die Fähigkeiten des IsiCellObject unterstützen. 
+## TCellObject, IsiCellObject und seine Erben
+
+Zur Umsetzung der MicroCell Architektur wird das **TCellObject** als Basisobjekt bzw. Stammzelle eingeführt. Das TCellObject implementiert das Basis-Skillinterface **IsiCellObject**. Alle Mikrozellen sind von TCellObject oder einer Ableitung abzuleiten. Somit besitzt jede Mikrozelle zukünftig die Fähigkeiten des TCellObject, indem sie das Skillinterface IsiCellObject unterstützen. Alle "ordentlichen" Skillinterface sind vom IsiCellObject oder einer Ableitung abgeleitet. Somit wird ebenfalls sichergestellt, dass alle Skillinterface immer auch die Fähigkeiten des IsiCellObject beinhalten und unterstützen. 
 
 <img src="Illustration/TCellObject und IsiCellObject Schema.png" alt="TCellObject und IsiCellObject Schema" style="zoom:85%;" />
 
-Kurz um: IsiCellObject ist der kleinste Nenner der MicroCell Architektur unter Delphi. Die Implementierung von IsiCellObject im TCellObject gewährleistet die Basisimplementierung aller darin enthalten Methoden und Eigenschaften.
+Kurz um: **IsiCellObject ist der kleinste Nenner der MicroCell Architektur unter Delphi**. Die Implementierung von IsiCellObject im TCellObject gewährleistet die Implementierung aller darin enthalten Methoden und Eigenschaften in allen Zellobjekten.
 
-Die Unit *OurPlant.Common.CellObject.pas* definiert das TCellObject und das Skillinterface IsiCellObject. Einige Details sind der Migration der Architektur in die bestehende OurPlant OS Architektur von 2020 geschuldet. So findet sich unter anderem eine Klasse TOurPlantObject mit dem Interface IsiOurPlantObject. Sie haben nur eine untergeordnete Rolle als Verbindungsschicht zwischen der "alten" Architektur und der neuen MicroCell Architektur.
+Auf Zellobjekte wird ausschließlich über Interface-Referenzierungen zugegriffen. Die Verwaltung der Zellen als Objekt-Instanzen ist nicht zulässig. Die Zellen werden ausschließlich unter den Konventionen der Interface-Technologie verwendet. Jede Zelle kann eine beliebige Anzahl von Skillinterface implementieren.
 
 ```pascal
 unit OurPlant.Common.CellObject;
@@ -225,7 +227,9 @@ type
   end;
 ```
 
-Das Beispiel des Digital Input Skills **IsiDigitalInput1** aus der Unit *OurPlant.SkillInterface.DigitalInput.pas* zeigt die Ableitung von IsiCellObject. Zu jedem Skillinterface gehören vorgefertigte Zellen, die die Skillinterface in andere Zellen implementieren können (später hierzu mehr). 
+Die Unit *OurPlant.Common.CellObject.pas* definiert das TCellObject und das Skillinterface IsiCellObject. Einige Details sind der Migration der Architektur in die bestehende OurPlant OS Architektur von 2020 geschuldet. So findet sich unter anderem eine Klasse TOurPlantObject mit dem Interface IsiOurPlantObject. Sie haben nur eine untergeordnete Rolle als Verbindungsschicht zwischen der "alten" Architektur und der neuen MicroCell Architektur.
+
+Das Beispiel des Skillinterface **IsiDigitalInput1** und die universellen Adapter- und Vorlagenzellen **TsiDigitalInput1** und **TcoDigitalInput1** aus der Unit *OurPlant.SkillInterface.DigitalInput.pas* zeigt die Ableitung von IsiCellObject. Zu jedem Skillinterface gehören vorgefertigte Zellen, die die Skillinterface in andere Zellen implementieren können (später hierzu mehr). 
 
 ```pascal
 unit OurPlant.SKILLInterface.DigitalInput;
@@ -266,45 +270,67 @@ type
   
 ```
 
-Das Objekt **TsiDigitalInput1** aus dem Beispiel ist vom **TCellObject** abgeleitet und implementiert zusätzlich die Fähigkeit des Skillinterface **IsiDigitalInput1**. Über beide Pfade der Ableitung und Implementierung wird ebenfalls immer auch sichergestellt, dass die Zelle auch als bzw. über **IsiCellObject** angesprochen werden kann.  **TsiDigitalInput1** ist eine Skillinterface Adapter-Zelle. Sie realisiert vollständig das Skillinterface. Die Logik aus der Mutterzelle wird später über die OnRead und OnWrite Events der Skillmethod-Zellen angedockt. (Hierzu später mehr).  **TcoDigitalInput1** hingegen ist eine Skillinterface Zellenvorlage für  **IsiDigitalInput1** Implementierungen. Die Interface-Methoden sind nur abstrakt angelegt und müssen von den späteren Erben logisch belegt werden. Daher macht es auch kein Sinn, sie für eine allgemeine direkte Verwendung zu registrieren (Auch hierzu später mehr).
+Das Objekt **TsiDigitalInput1** aus dem Beispiel ist vom **TCellObject** abgeleitet und implementiert zusätzlich die Fähigkeit des Skillinterface **IsiDigitalInput1**. Über beide Pfade (Ableitung und Implementierung) wird immer auch sichergestellt, dass die Zelle auch als **IsiCellObject** angesprochen werden kann.  TsiDigitalInput1 ist der universelle Skillinterface Adapter von IsiDigitalInput1. Die Zelle realisiert vollständig das Skillinterface. Die Logik aus der Mutterzelle wird später über die OnRead und OnWrite Events der Skillmethod-Zellen angedockt. (Hierzu später mehr).  **TcoDigitalInput1** hingegen ist eine Skillinterface Zellenvorlage für Implementierungen von  IsiDigitalInput1.
 
-## TCellObject und seine Erben
+## Die rekursive Zellenstruktur
 
-Das Basisobjekt TCellObject und seine Erben repräsentieren eine Mikrozelle und somit das Subsystem einer Anwendung. Dies ist unabhängig von Umfang, Komplexität oder hierarchischer Einordnung des Subsystems im Gesamtsystem. Zellobjekte werden im Betrieb ausschließlich über Interface-Referenzierungen angesprochen und verwendet. Die Verwaltung der Zellen als Objekt-Instanzen ist nicht zulässig. Die Zellen werden ausschließlich unter den Konventionen der Interface-Technologie verendet. 
+Zellen sind immer Teil einer Subzellenstruktur. Hiervon gibt es nur eine gültige Ausnahme. Das ist der Discovery Manager als ROOT des Gesamtsystems. Alle anderen Zellen brauchen zur Gültigkeit in der Architektur eine übergeordnete Zelle als Controller. Jede Zelle hat von TCellObject ein dynamisches Array von Skillinterface-Referenzen als `TArray<IsiCellObject>` vererbt bekommen. Somit kann jede Zelle unbegrenzt Zellen beliebigen Typs verwalten.
+
+<img src="Illustration/Rekursive Zellstruktur.png" alt="Rekursive Zellstruktur" style="zoom:100%;" />
+
+IsiCellObject liefert über TCellObject bereits eine Vielzahl von Verwaltungsfunktionen zur Nutzung dieser rekursiven Subzellenstruktur mit. Wird eine neue Zelle erstmal in eine Liste eingefügt, so wird automatische die Zuordnung des Zellcontrollers vorgenommen. Zellen können aber auch in weitere Subzellen-Listen eingefügt werden. Dann werden sie jedoch nur noch als Link (fremde Zelle) in dieser Liste verwaltet. Die Architektur stellt sicher, dass jede Zelle genau nur eine Controllerzelle besitzt. Dies ist zur LongName Adressierung und zur Rekonstruktion des Systems notwendig.
+
+Beim Hinzufügen von Zellen wird grundsätzlich zwischen dem Konstruieren oder Addieren von Zellen unterschieden. Beim Konstruieren (z.B. `siConstructNewSubCell`  oder  `siConstructSubCell` ) wird die Zelle im vorderen Listenbereich statisch eingefügt. Konstruierte Zellen werden bei der Listenbehandlung, insbesondere bei der Wiederherstellung (Restore) nicht überschrieben. Sie sind vom Zellenbauer als feste Subzellen zur Abboldung einer vorher bekannten Struktur bestimmt (zum Bespiel Datenzellen oder Skillinterface Zellen). Das Addieren (z.B. `siAddNewSubCell` oder `siAddSubCell`) hingegen ist zur Veränderung der Listen zur Laufzeit als dynamische Einträge vorgesehen. Dynamische Einträge werden beim Wiederherstellen tatsächlich auch wieder angelegt, gleich wann in wie sie entstanden sind.
+
+## Implementierte und angedockte Skillinterface
+
+Zur entwicklerunabhängigen Nutzung der Zellen implementiert jede Zelle vereinheitlichte Skillinterface. Die Skillinterface sind von **IsiCellObject** als Basis-Skillinterface abgeleitet. Sie repräsentiert die Fähigkeit eines Objektes eine Mikrozelle zu sein. 
+
+Das Basis-Skillinterface IsiCellObject nimmt einen Sonderstatus in der MikroCell Architektur ein. Die im Skillinterface realisierten Methoden sind ausschließlich als Interfacefunktionen ansprechbar. Für sie existieren keine Skillmethod-Zellen. Jede Zelle kann über dieses Interface referenziert und verwaltet werden. IsiCellObject verfügt über eine Vielzahl von Grundfuntionalitäten:
+
+- Allgemeine Zell Header Informationen (Name, Type, Klasse, Controller, etc.)
+- Subzellen Verwaltung
+- Verwaltung des allgememeinen Zellenwertes als TValue, als String und als JSON Object
+- Verwaltung der OnRead und OnWrite Events
+- Transport des Inhalts der Zelle und Subzellen als JSON Content
+- und das rekursive Sichern und Wiederherstellen der Zellen und Subzellen
+
+Skillinterface unterliegen klaren Namenskonventionen. Sie führen immer den Präfix **Isi**... voran (z.B. **Isi**CellObject oder **Isi**DigitalInput1). Sie sind in einem Skillinterface Register festgeschrieben und unterliegen einem Releasemanagement. Hierzu führen alle Skillinterface am Ende ihre Versionsnummer (z.B. IsiDigitalInput**1**). Skillinterface dürfen nur durch einen redaktionellen Freigabelauf verändert und weiterentwickelt werden. Jede Weiterentwicklung führt zu einer neuen Releasenummer. Somit sollen Inkombatibelitäten in der Verwendung durch unterschiedliche Zellen verhindert werden. 
+
+Neben den offiziellen Skillinterface können vom Entwickler auch eigene private (nicht standardisierte) Interface implementiert werden. Diese müssen sich jedoch namentlich von den Konventionen der "offiziellen" Skillinterface (**Isi**) unterscheiden. "Private" Interface werden nicht registriert und sind somit auch nicht systemweit bzw. entwicklerübergreifend verwendbar.
+
+Alle "offiziellen" Skillinterface sind von IsiCellObject oder einem Derivat abzuleiten. Für die "privaten" ist dies fakultativ, bietet sich aber durchaus auch an. 
+
+Skillinterface sind entweder direkt in die Zelle zu implementieren oder als Skillinterface-Subzellen an die Hauptzelle anzudocken. Jede Zelle kann so eine beliebige Anzahl von Skillinterfaces implementieren.
 
 <img src="Illustration/MicroCell TCellObject Schema.png" alt="MicroCell TCellObject Schema" style="zoom:75%;" />
 
-Zur entwicklerunabhängigen Nutzung der Zellen implementiert jede Zelle vereinheitlichte Skillinterface. Die Skillinterface sind von IsiCellObject als Basis-Skillinterface abgeleitet. Sie repräsentiert die Fähigkeit eines Objektes eine Mikrozelle zu sein.  Für die eigenen Realisierung von Logik und Verknüpfungen können Mikrozellen aber auch "private" Interface implementieren. Diese müssen sich namentlich jedoch von den Konventionen der "ordentliche" Skillinterfaces (**Isi**...SkillName...) unterscheiden. "Private" Interface werden nicht registriert und sind somit auch nicht Systemweit bzw. entwicklerübergreifend verwendbar.
+Alle Methoden der offiziellen Skillinterface (außer IsiCellObject und Ausnahmen des Systems) müssen als Skillmethod-Subzellen vorgehalten werden. Diese Skillmethod-Zellen haben mehrere Bedeutungen. Zum Einem nehmen die Skillmethod-Zellen die OnRead und OnWrite Events der Skillmethoden auf. Diese Funktion wird benötigt, um die Skillinterface logisch und universell an die Hauptzelle andocken zu können. Des weiteren können die Methoden der Skillinterface auch über die Zellstruktur angesprochen werden. Auch die Parameter einer Skillmethod sind als Subzellen ausgeführt. Im Beispiel einer SampleCell, welche  ein Skillinterface IsiDigitalInput1 implementiert, sieht eine verwendete Subzellenstruktur wie folgt aus:
 
-## IsiCellObject und "ordentlichen" Skillinterface
+- CellA/**DigitalInput**
 
-Die Basis aller ordentlichen Skillinterface sind das Basis-Skillinterface **IsiCellObject**. Es nimmt einen Sonderstatus in der MikroCell Architektur ein. Die im Skillinterface realisierten Methoden sind ausschließlich als Interfacefunktionen ansprechbar. Für sie existieren keine Skillmethod-Zellen.
+- CellA/DigitalInput/**siSize**
 
- Alle "ordentlichen" Skillinterface sind von IsiCellObject oder einem Derivat abzuleiten. Für die "privaten" ist dies fakultativ, bietet sich aber durchaus an. Im Unterschied zum IsiCellObject müssen alle Methoden der ordentlichen Skillinterface auch als Skillmethod-Zellen vorgehalten werden. Diese Skillmethod-Zellen haben mehrere Bedeutungen. Zum Einem nehmen die Skillmethod-Zellen die OnRead und OnWrite Events der Skillmethoden auf. Diese Funktion wird benötigt, um die Skillinterface logisch und universell an die Mutterzellen andocken zu können. Des weiteren können die Methoden der Skillinterface auch über die Zellstruktur angesprochen werden. Auch die Parameter einer Skillmethod sind als Subzellen ausgeführt. Im Beispiel einer SampleCell, welche  ein Skillinterface IsiDigitalInput1 implementiert, sieht eine verwendete Subzellenstruktur wie folgt aus:
+- CellA/DigitalInput/**siBit**
 
-`SampleCell/DigitalInput`
+- CellA/DigitalInput/siBit/***aBit***
 
-`SampleCell/DigitalInput/siSize`
+- CellA/DigitalInput/**siInteger**
 
-`SampleCell/DigitalInput/siBit`
-
-`SampleCell/DigitalInput/siBit/aBit`
-
-`SampleCell/DigitalInput/siInteger`
 
 Eine typische Interfaceausführung wie im Beispiel der Bitabfrage von IsiDigitalInput1: 
 
 ```pascal
-TcoSampleCell = class(TCellObject)
+TcoCellA = class(TCellObject)
 private
   [NewCell( TsiDigitalInput1, 'Digital input 1' )]
   fsiDigitalInput : IsiDigitalInput1;
-  
   function GetChannelState( const aChannel : byte) : boolean;
 end;
 
-function TcoSampleCell.GetChannelState( const aChannel : byte) : boolean;
+function TcoCellA.GetChannelState( const aChannel : byte) : boolean;
 begin
+  Assert( isValid( fsiDigitalInput), 'Invalid cell reference in digital input of TcoCellA');
 	Result := fsiDigitalInput.siBit(aChannel);
 end;
 ```
@@ -314,13 +340,23 @@ kann auch als Zellstruktur ohne die Verwendung  von Interfacefunktionen ausgefü
 ```pascal
 function TcoSampleCell.GetChannelState( const aChannel : byte) : boolean;
 begin
-  CellAs<IsiInteger>( 'OP:/sample cell/Digital input 1/siBit/aBit' ).siAsInteger := aChannel;
-  Result := CellAs<IsiBoolean>( 'OP:/sample cell/Digital input 1/siBit' ).siAsBoolean;
+  CellAs<IsiInteger>( 'OP:/CellA/Digital input 1/siBit/aBit' ).siAsInteger := aChannel;
+  Result := CellAs<IsiBoolean>( 'OP:/CellA/Digital input 1/siBit' ).siAsBoolean;
 end;
 
 ```
 
+### Implementierungsformen
 
+Skillinterface können auf mehrere verschiedene Arten in und an einer Zelle implementiert werden. Hierbei unterscheiden wir grundsätzlich,  
+
+1. ob das Skillinterface direkt vom Zellobjekt implementiert wird, 
+2. ob es durch eine angedockte Skillinterface-Zelle direkt von der Zelle implementiert wird (`property implements`) oder 
+3. ob es durch eine  Skillinterface-Zelle indirekt an die Zelle nur angedockt ist.
+
+ Für das Andocken stehen stehen üblicherweise zwei unterschiedliche Vorlagen zur Verfügung. Der universelle Skillinterface Adapter (z.B. TsiDigitalInput1) oder die echte Implementierungsvorlagen für Zellen mit Skillinterface (z.B. TcoDigitalInput1). Beide Vorlagen werden bei der Entwicklung des Skillinterface angelegt und den Entwicklern zur Verfügung gestellt. 
+
+Die Implementierungsvorlagen können als Vorlage im Fall 1 verwendet werden um das Skillinterface direkt in der Zelle zu realisieren oder in Fällen 2 und 3 die angedockte Skillinterfacezelle die Logik des Interfaces abgesetzt (deposed) realisiert. 
 
 
 
